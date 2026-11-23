@@ -1,0 +1,27 @@
+# prek (or pre-commit): `prek install`
+repos:
+  - repo: local
+    hooks:
+      - id: biome
+        name: biome check
+        entry: bunx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true
+        language: system
+        types_or: [ts, json]
+      - id: typecheck
+        name: typecheck
+        entry: bun run typecheck
+        language: system
+        pass_filenames: false
+        types: [ts]
+      - id: test
+        name: vitest
+        entry: bun run test
+        language: system
+        pass_filenames: false
+        files: ^(src|test|bots)/
+      - id: validate
+        name: validate bots
+        entry: bun run validate
+        language: system
+        pass_filenames: false
+        files: ^bots/
