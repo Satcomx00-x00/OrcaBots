@@ -2,7 +2,7 @@
 
 Priority and parent are fields of the issue's work item. Set them through GitLab's GraphQL API, as your owner, with `glab`. Write each query to a file and send it with `glab api graphql -F query=@<file>`; every other `-f name=value` becomes a variable of the query.
 
-Field and type names below are from GitLab's GraphQL reference. If a call is refused, read the error, say it once in the summary, and don't try another way.
+Field and type names below are from GitLab's published GraphQL reference (`workItemUpdate`, `WorkItemWidgetCustomFieldValueInputType`, `WorkItemWidgetHierarchyUpdateInput`). If a call is refused, read the error, say it once in the summary, and don't try another way.
 
 ## The work item's id
 

@@ -29,5 +29,5 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 - It names who can unblock, never who caused the wait, and it never totals or compares people's waits.
 - An item still stuck the next day comes back as "day 2", not as news.
 - It posts nothing on GitLab until you agree, and never nudges the same thing twice in one day.
-- Iterations and issue weights are paid GitLab features, as far as we know. On the free tier, tell the bot you use milestones and no weights; it then counts issues.
+- Iterations and issue weights are paid GitLab features (Premium or Ultimate). On the free tier, tell the bot you use milestones and no weights; it then counts issues.
 - No webhooks: this bot runs on its schedule only.

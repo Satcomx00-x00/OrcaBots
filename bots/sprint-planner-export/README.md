@@ -29,5 +29,5 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 - It needs closed sprints to work out velocity. With fewer than three it says so and uses what there is.
 - It never plans above capacity, and never gives an unsized story a size.
 - It changes nothing on GitLab until you agree, and then only which sprint a story is in.
-- Iterations and issue weights are paid GitLab features, as far as we know. On the free tier, tell the bot you use milestones and no weights; it then counts issues.
+- Iterations and issue weights are paid GitLab features (Premium or Ultimate). On the free tier, tell the bot you use milestones and no weights; it then counts issues.
 - No webhooks: this bot runs on its schedule only.

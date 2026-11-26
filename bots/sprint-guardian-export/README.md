@@ -36,4 +36,4 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 - It gives no verdict in the first two days of a sprint: there is no pace yet.
 - With the webhook on, every issue change in the project costs the bot a turn, even the ones it skips. Leave the webhook off on a busy project and rely on the morning check.
 - It never refuses an addition. It says what it costs; you decide.
-- Iterations and issue weights are paid GitLab features, as far as we know. On the free tier, tell the bot you use milestones and no weights; it then counts issues.
+- Iterations and issue weights are paid GitLab features (Premium or Ultimate). On the free tier, tell the bot you use milestones and no weights; it then counts issues.

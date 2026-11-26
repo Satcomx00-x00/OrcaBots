@@ -29,5 +29,5 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 - All numbers are for the whole team. It never gives or compares numbers per person, and leaves names out.
 - It shows what happened, not why. The why is the team's.
 - It creates nothing on GitLab until you agree.
-- Iterations and issue weights are paid GitLab features, as far as we know. On the free tier, tell the bot you use milestones and no weights; it then counts issues.
+- Iterations and issue weights are paid GitLab features (Premium or Ultimate). On the free tier, tell the bot you use milestones and no weights; it then counts issues.
 - No webhooks: this bot runs on its schedule only.

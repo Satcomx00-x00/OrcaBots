@@ -13,9 +13,9 @@ Do these once, in order, after **Create**. Everything arrives paused, and the bo
 
    The bot needs it to edit a note in place. Orca's own GitLab features use it too, so you may already have it.
 3. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`.
-4. **Create the `unplanned` label** in your GitLab group or project, if you don't have one. The bot never invents a label.
+4. **Create the `unplanned` label** in your GitLab group or project, if you don't have one. The bot never invents a label: GitLab would create a missing label silently, so the bot checks each one exists before using it, and leaves it off when it doesn't.
 5. **Answer the bot's first questions:**
-   - the GitLab group or project, and what a sprint is for your team: an **iteration** or a **milestone**;
+   - the GitLab group or project, and what a sprint is for your team: an **iteration** or a **milestone**. With iterations, also the name of your iteration cadence;
    - which projects it may read your work from. Anything outside them is ignored;
    - the project that gets work belonging to no repo, such as a review or a support request;
    - the team's labels for each type of issue (implementation, bug, user story, task);
@@ -63,11 +63,11 @@ Do these once, in order, after **Create**. Everything arrives paused, and the bo
   It raises a weight as soon as the time spent passes its range, and lowers one only when the work is done and took less. The weight the team planned stays in the note as "planned <n>", so your estimates aren't lost. **Estimate calibrator** uses that planned weight.
 - **Time tracking** uses GitLab's own: time spent is logged once a day per issue, and an estimate is set only where there is none. GitLab adds its own small "added time spent" lines to the issue's activity when time is logged. Those are GitLab's system lines, not comments from the bot; the bot still writes exactly one note.
 - **Time is worked out from your sessions and commits,** so it is an approximation, rounded to the quarter hour. What you tell the bot wins: "that took two hours".
-- **Merge request:** if yours doesn't already name the issue, the bot adds one line at the end of its description, `Related to #<n>`, and changes nothing else in it.
+- **Merge request:** the bot asks GitLab whether the merge request is already linked to the issue. If it isn't, it adds one line at the end of the merge request's description, `Related to #<n>`, which is what makes GitLab link the two, and changes nothing else in it.
 - **Priority** is the work item's own Priority field, set to one of the options your group defined for it. It is a custom field of the top-level group, so the bot looks its options up instead of assuming them. Only if your group has no such field does it fall back to a priority label.
 - **Parent** is the work item's own parent: an epic or a parent issue.
 - **Both are set only where empty,** and never changed once set. When the bot can't tell which parent or priority is right, it asks in its summary.
-- **Weights, epics, iterations and custom fields such as Priority are paid GitLab features** (Premium or Ultimate). Where your project doesn't have one, the bot skips it and says so once.
+- **Weights, epics, iterations and custom fields such as Priority are paid GitLab features** (Premium or Ultimate, per GitLab's docs). Where your project doesn't have one, the bot skips it and says so once.
 - **It never closes an issue.** When work is done the note says Done, and the summary lists the issue for you to close.
 - **What stays out of GitLab:** text copied from sessions or private messages, customer data, anything sensitive, hours of the day, and @-mentions. It describes the work and gives durations.
 - **When it isn't sure where work belongs, it asks** in its summary instead of guessing.

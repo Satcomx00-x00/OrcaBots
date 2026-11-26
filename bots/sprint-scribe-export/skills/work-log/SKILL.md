@@ -9,7 +9,7 @@ description: Turn a day of real work into an up-to-date GitLab sprint board, wit
 
 Read `memory/scribe-setup.md` in your home; if it is missing, ask your owner and write it:
 
-- the GitLab group or project, and what a sprint is: an **iteration** or a **milestone**;
+- the GitLab group or project, and what a sprint is: an **iteration** or a **milestone**. For iterations, the name of the cadence the team's sprints belong to;
 - the projects you may read work from, each with its Orca project (`orca repo list --json`) and its GitLab project;
 - the default project for work that belongs to no repo (a review, a call, a support request);
 - the team's labels: for unplanned work (default `unplanned`), for each type (implementation, bug, user story, task), and for status if the board uses them;
@@ -84,7 +84,10 @@ Write it to the standard in `templates.md`:
 - **Definition of done:** the team's, from the setup; else the template's. An implementation issue has Verification instead.
 - **Size check:** small enough to finish within the sprint and testable on its own. If it is plainly bigger, say so in the description and in your summary: it should be split at the next planning.
 
-Set: assignee your owner; the current sprint (`milestone_id`, or for an iteration the field the connector offers, else the line `/iteration --current` at the end of the description); labels `unplanned` plus the team's type label, never a label that doesn't exist. Create it through the GitLab connector, or `glab api --method POST projects/<project>/issues` with `-F` fields and `-F description=@<file>`.
+Set: assignee your owner; the current sprint; labels `unplanned` plus the team's type label.
+
+- **Sprint.** A milestone: `milestone_id`. An iteration: the field the connector offers, else one line at the end of the description, `/iteration [cadence:"<cadence name>"] --current`. The short form `/iteration --current` works only when the group has a single cadence.
+- **Labels.** GitLab creates a label that doesn't exist when you name it, without asking. So check every label first: `glab api "projects/<project>/labels?search=<name>"` must return one with exactly that name. A label that isn't there is left off, and you say so in the summary. Never let one be created. Create it through the GitLab connector, or `glab api --method POST projects/<project>/issues` with `-F` fields and `-F description=@<file>`.
 
 Then set its fields (step 5), add its tracking note (step 3), and read the issue back: right assignee, sprint, labels, weight, parent, priority and time. Whatever didn't take, say in the summary. Add a line in `memory/scribe-log.md`: date, piece of work, issue.
 
@@ -129,7 +132,8 @@ The right weight for an issue is the smallest one whose range covers the total t
 ### Merge request
 
 - Find the merge request for the work: the one from the workspace's branch, or the one whose commits you logged.
-- If it doesn't already name the issue, add one line at the end of its description, `Related to #<iid>` (or `Closes #<iid>` when the setup says so): read the description, add the line, and send the whole text back with `glab api --method PUT projects/<project>/merge_requests/<mr_iid> -F description=@<file>`. Only on your owner's own merge requests. Change nothing else in it.
+- See whether GitLab already links them: `glab api projects/<project>/issues/<iid>/related_merge_requests`. If the merge request is in that list, do nothing.
+- If it isn't, add one line at the end of its description, `Related to #<iid>` (or `Closes #<iid>` when the setup says so): read the description, add the line, and send the whole text back with `glab api --method PUT projects/<project>/merge_requests/<mr_iid> -F description=@<file>`. Only on your owner's own merge requests. Change nothing else in it. Then check the list again.
 - Put it in the note's Links with its state and pipeline.
 - Several merge requests for one issue: all of them, each named once.
 
@@ -154,7 +158,7 @@ Priority is the work item's **Priority field**, set to one of the options the te
   - **Low:** nice to have.
 - Use the option the setup maps to that level. Never invent an option, and never pick one by its position in the list.
 - Set it with the `customFieldsWidget` mutation, then read it back.
-- **Only when the group has no Priority field,** use the team's priority label instead: `glab api --method PUT projects/<project>/issues/<iid> -F add_labels=<label>`. Never both.
+- **Only when the group has no Priority field,** use the team's priority label instead: `glab api --method PUT projects/<project>/issues/<iid> -F add_labels=<label>`, after checking that the label exists, as in step 4. Never both.
 
 ### Check
 

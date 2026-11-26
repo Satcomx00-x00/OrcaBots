@@ -29,5 +29,5 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 - Patterns are by kind of story, never by person. Assignees are left out of the report.
 - It never changes a weight or an estimate on GitLab.
 - Cycle time includes waiting: a story that mostly waited for review is reported as waiting, not as underestimated.
-- Iterations and issue weights are paid GitLab features, as far as we know. On the free tier, tell the bot you use milestones and no weights; it then counts issues.
+- Iterations and issue weights are paid GitLab features (Premium or Ultimate). On the free tier, tell the bot you use milestones and no weights; it then counts issues.
 - No webhooks: this bot runs on its schedule only.
