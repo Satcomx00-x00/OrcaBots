@@ -1,6 +1,6 @@
 # orca-bots
 
-Importable bots for [Orca](https://github.com/stablyai/orca) that watch your agents, your app and your sprint.
+Importable bots for [Orca](https://github.com/stablyai/orca) that watch your agents, your app, your sprint and your cluster.
 
 **Your agents**
 
@@ -32,6 +32,17 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 | [Blocker chaser](bots/blocker-chaser-export)           | Weekdays 9 AM                                         | Lists what is stuck, who can move it and the smallest next step                                      |
 | [Retro miner](bots/retro-miner-export)                 | Fridays 2 PM, around the end of a sprint              | Brings the sprint's facts to the retro, three talking points, and where last retro's actions stand   |
 
+**Your cluster (Kubernetes)**
+
+| Bot                                            | Runs             | What it does                                                                                         |
+| ---------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------- |
+| [Cluster rounds](bots/cluster-rounds-export)   | Weekdays 8:30 AM | Says what broke or got worse since yesterday: pods, nodes, jobs, certificates, with the likely cause |
+| [Drift detector](bots/drift-detector-export)   | Weekdays 11 AM   | Lists what in the cluster differs from Git and what was changed by hand                              |
+| [Right-sizer](bots/right-sizer-export)         | Wednesdays 2 PM  | Compares CPU and memory requests with seven days of use: the most oversized and the most at risk     |
+| [Cluster sweeper](bots/cluster-sweeper-export) | Tuesdays 2 PM    | Finds volumes, namespaces and load balancers nobody uses, and says how to remove each safely         |
+
+The cluster bots only read: `kubectl get`, `describe`, `logs` and `top`, through a context you name. They never read a Secret's values, and every change they propose is a pull request or merge request to your manifests repo. [`k8s/read-only-rbac.yaml`](k8s/read-only-rbac.yaml) sets up a read-only identity for them.
+
 The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
 ## Install a bot
@@ -59,6 +70,10 @@ In Orca: **New bot → From a link**, paste the bot's link, review what it bring
 | Sprint guardian      | _not published yet_ |
 | Blocker chaser       | _not published yet_ |
 | Retro miner          | _not published yet_ |
+| Cluster rounds       | _not published yet_ |
+| Drift detector       | _not published yet_ |
+| Right-sizer          | _not published yet_ |
+| Cluster sweeper      | _not published yet_ |
 
 Orca only opens its own share links (`https://app.orca.dev/bots/share/<id>` or `orca://bots/share/<id>`), never a GitHub or raw file URL. A link is published once from a bot made from this repo's folder (below): open the bot, **Share**, keep everything ticked, copy the link, and put it in the table above. Publish again after changing a bot folder so the link serves the new version.
 
