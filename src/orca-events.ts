@@ -34,10 +34,26 @@ export const ORCA_EVENT_KINDS = {
 export type OrcaEventSource = keyof typeof ORCA_EVENT_KINDS
 export const ORCA_EVENT_SOURCES = Object.keys(ORCA_EVENT_KINDS) as [OrcaEventSource, ...OrcaEventSource[]]
 
-export const ORCA_CONNECTORS = ['github', 'slack', 'linear', 'google', 'composio'] as const
-export type OrcaConnector = (typeof ORCA_CONNECTORS)[number]
+/** Connectors that deliver events and travel in a share link as themselves (BOT_PACKAGE_CONNECTORS). */
+export const ORCA_NATIVE_CONNECTORS = ['github', 'slack', 'linear', 'google', 'composio'] as const
+export type OrcaNativeConnector = (typeof ORCA_NATIVE_CONNECTORS)[number]
 
-export const CONNECTOR_FOR_SOURCE: Record<OrcaEventSource, OrcaConnector | null> = {
+/**
+ * Connectors Orca lists as app rows (BOT_MCP_APPS in shared/bots/bot-mcp-apps.ts): the vendor's own MCP
+ * server, signed in once in the browser. They send no events; a share link carries them as the bot's tool.
+ */
+export const ORCA_APP_CONNECTORS = {
+  gitlab: { url: 'https://{host}/api/v4/mcp', defaultHost: 'gitlab.com' }
+} as const satisfies Record<string, { url: string; defaultHost: string }>
+export type OrcaAppConnector = keyof typeof ORCA_APP_CONNECTORS
+
+export const ORCA_CONNECTORS = [
+  ...ORCA_NATIVE_CONNECTORS,
+  ...(Object.keys(ORCA_APP_CONNECTORS) as OrcaAppConnector[])
+] as const
+export type OrcaConnector = OrcaNativeConnector | OrcaAppConnector
+
+export const CONNECTOR_FOR_SOURCE: Record<OrcaEventSource, OrcaNativeConnector | null> = {
   slack: 'slack',
   github: 'github',
   linear: 'linear',

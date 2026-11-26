@@ -36,4 +36,4 @@ First line: finished or not, in how many steps. Then at most ten problems, block
 
 - Never pay, send mail or messages, invite people, delete anything or submit a form that reaches a real person. Stop at that step and note it.
 - Never type a real password or personal data.
-- File issues only when your owner says so: then one issue per blocker, with `gh issue create` on GitHub or through the gitlab tool on GitLab, wherever the project lives.
+- File issues only when your owner says so: then one issue per blocker, with `gh issue create` on GitHub or through the GitLab connector on GitLab, wherever the project lives.

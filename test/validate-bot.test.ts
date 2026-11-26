@@ -133,6 +133,32 @@ describe('validateBot', () => {
     expect(await messages({ ...VALID, 'ROUTINES.md': withGitlab })).toEqual([])
   })
 
+  it('accepts the GitLab connector and a webhook routine that uses it', async () => {
+    const withGitlab = ROUTINES.replace('connectors: [github]', 'connectors: [github, gitlab]').replace(
+      'events:\n',
+      'events:\n  - name: "When GitLab calls"\n    source: webhook\n    event: call\n    prompt: Read it through the GitLab connector.\n'
+    )
+    expect(await messages({ ...VALID, 'ROUTINES.md': withGitlab })).toEqual([])
+  })
+
+  it('rejects a prompt that names a connector the bot does not list', async () => {
+    expect(
+      await messages({
+        ...VALID,
+        'ROUTINES.md': ROUTINES.replace('Read it with', 'Read it through the GitLab connector with')
+      })
+    ).toEqual(['ROUTINES.md: events.0: names the "GitLab" connector, which is not in connectors'])
+  })
+
+  it('rejects a connector Orca does not have', async () => {
+    expect(
+      await messages({
+        ...VALID,
+        'ROUTINES.md': ROUTINES.replace('connectors: [github]', 'connectors: [github, bitbucket]')
+      })
+    ).toEqual([expect.stringMatching(/^ROUTINES\.md: connectors\.1: /)])
+  })
+
   it('rejects a prompt that names a tool the bot does not add', async () => {
     expect(
       await messages({

@@ -1,8 +1,5 @@
 ---
-connectors: [github]
-tools:
-  - name: gitlab
-    url: https://gitlab.com/api/v4/mcp
+connectors: [github, gitlab]
 schedules:
   - name: "Fresh-eyes user: A walk through the main job"
     cron: "0 10 * * 3"

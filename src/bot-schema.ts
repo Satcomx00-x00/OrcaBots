@@ -58,7 +58,11 @@ const uniqueNames = <T extends { name: string }>(items: readonly T[]): boolean =
 
 export const RoutinesSchema = z
   .object({
-    connectors: z.array(z.enum(ORCA_CONNECTORS)).max(ORCA_LINK_LIMITS.connectors).default([]),
+    connectors: z
+      .array(z.enum(ORCA_CONNECTORS))
+      .max(ORCA_LINK_LIMITS.connectors)
+      .refine((list) => new Set(list).size === list.length, 'must not repeat')
+      .default([]),
     tools: z.array(ToolSchema).max(ORCA_LINK_LIMITS.tools).refine(uniqueNames, 'names must be unique').default([]),
     schedules: z
       .array(ScheduleSchema)

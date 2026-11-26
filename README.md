@@ -8,7 +8,7 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 | [Skill miner](bots/skill-miner-export)    | Mondays 10 AM                                                 | Spots procedures you keep explaining to agents and drafts each as a SKILL.md                             |
 | [Fresh-eyes user](bots/fresh-eyes-export) | Wednesdays 10 AM, and after a GitHub or GitLab deploy         | Walks your app like a first-time user, desktop and phone, and reports blockers with screenshots          |
 
-Every bot works with **GitHub** (the GitHub connector, `gh`) and **GitLab** (GitLab's own MCP server, added as the bot's `gitlab` tool). Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
+Every bot works with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
 ## Install a bot
 
@@ -26,7 +26,7 @@ In Orca: **New bot → From a link**, paste the bot's link, review what it bring
 
 Orca only opens its own share links (`https://app.orca.dev/bots/share/<id>` or `orca://bots/share/<id>`), never a GitHub or raw file URL. A link is published once from a bot made from this repo's folder (below): open the bot, **Share**, keep everything ticked, copy the link, and put it in the table above. Publish again after changing a bot folder so the link serves the new version.
 
-A link carries the soul, skills, schedules, the GitHub connector, GitHub event routines and the `gitlab` tool. It does not carry webhook routines, so the GitLab merge-request and deploy routines come from the bot itself: its soul offers to create them in its first chat.
+A link carries the soul, skills, schedules, the GitHub and GitLab connectors, and GitHub event routines. It does not carry webhook routines, so the GitLab merge-request and deploy routines come from the bot itself: its soul offers to create them in its first chat.
 
 ### From the folder
 
@@ -40,8 +40,8 @@ To create the bot on a paired server instead of this computer, copy the folder t
 
 - Its soul, its skills, and its schedules, **paused**. Turn them on in the bot's Automations once the first run looks right.
 - GitHub routines wait until you connect GitHub for that bot; it offers the Connect card.
-- The `gitlab` tool, signed in once in the browser. For self-managed or Dedicated GitLab, tell the bot your address; it re-adds the tool at `https://<host>/api/v4/mcp`.
-- GitLab routines are webhooks: copy the URL from the automation's card (**Copy URL**) into the GitLab project's **Settings → Webhooks**, with **Merge request events** (Agent coach) or **Deployment events** (Fresh-eyes user) ticked.
+- The GitLab connector, signed in once in the browser. For self-managed or Dedicated GitLab, tell the bot your address; it reconnects GitLab at `https://<host>/api/v4/mcp`.
+- GitLab sends Orca no events of its own, so GitLab routines are webhooks: copy the URL from the automation's card (**Copy URL**) into the GitLab project's **Settings → Webhooks**, with **Merge request events** (Agent coach) or **Deployment events** (Fresh-eyes user) ticked.
 - No keys or logins: there are none in this repo, and Orca never copies them.
 
 Agent coach and Skill miner read sessions only where **Settings → Agent Session History** is on, one computer at a time.
@@ -58,10 +58,8 @@ bots/<name>-export/
 `ROUTINES.md` frontmatter:
 
 ```yaml
-connectors: [github] # github | slack | linear | google | composio
-tools: # MCP servers the bot adds as its own tools; https only, no keys
-  - name: gitlab
-    url: https://gitlab.com/api/v4/mcp
+connectors: [github, gitlab] # github | slack | linear | google | composio | gitlab
+tools: [] # other MCP servers the bot adds as its own tools; https only, no keys
 schedules:
   - name: "Bot: what it posts"
     cron: "0 16 * * 5" # 5-field cron
@@ -72,12 +70,12 @@ events:
     event: pr_closed # must be an event Orca sends for that source
     prompt: Do Y with the my-skill skill.
   - name: "When GitLab calls: do Z"
-    source: webhook # GitLab has no connector: its project webhook calls this routine
+    source: webhook # GitLab's project webhook calls this routine
     event: call
-    prompt: Do Z through the gitlab tool.
+    prompt: Do Z through the GitLab connector.
 ```
 
-`bun run validate` checks each folder the way Orca's importer will need it: the sections, the cron syntax, that each event's source sends it and its connector is listed, that every "the X skill" or "the X tool" in a prompt exists under `skills/` or `tools`, and that nothing exceeds what one share link carries. Event names and link limits mirror Orca in [`src/orca-events.ts`](src/orca-events.ts).
+`bun run validate` checks each folder the way Orca's importer will need it: the sections, the cron syntax, that each event's source sends it and its connector is listed, that every "the X skill", "the X tool" or "the X connector" in a prompt exists under `skills/`, `tools` or `connectors`, and that nothing exceeds what one share link carries. Event names and link limits mirror Orca in [`src/orca-events.ts`](src/orca-events.ts).
 
 ## Develop
 

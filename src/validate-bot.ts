@@ -8,7 +8,8 @@ import { ORCA_LINK_LIMITS } from './orca-events.ts'
 export type Issue = { file: string; message: string }
 
 const SOUL_SECTIONS = ['## How I work', '## Never'] as const
-const MENTION = (kind: 'skill' | 'tool'): RegExp => new RegExp(`\\bthe ([A-Za-z0-9][\\w-]*) ${kind}\\b`, 'g')
+type Kind = 'skill' | 'tool' | 'connector'
+const MENTION = (kind: Kind): RegExp => new RegExp(`\\bthe ([A-Za-z0-9][\\w-]*) ${kind}\\b`, 'g')
 
 async function readText(path: string): Promise<string | null> {
   try {
@@ -78,22 +79,24 @@ function checkSkillCount(skills: ReadonlySet<string>): Issue[] {
     : []
 }
 
-/** Every "the X skill" and "the X tool" in a prompt must be one the bot brings. */
+/** Every "the X skill", "the X tool" and "the X connector" in a prompt must be one the bot brings. */
 function checkMentions(routines: Routines, skills: ReadonlySet<string>): Issue[] {
   const tools = new Set(routines.tools.map((tool) => tool.name))
+  const connectors = new Set<string>(routines.connectors)
   const kinds = [
-    { kind: 'skill', known: skills, where: 'skills/' },
-    { kind: 'tool', known: tools, where: 'tools' }
+    { kind: 'skill', known: skills, where: 'skills/', key: (name: string) => name },
+    { kind: 'tool', known: tools, where: 'tools', key: (name: string) => name },
+    { kind: 'connector', known: connectors, where: 'connectors', key: (name: string) => name.toLowerCase() }
   ] as const
   const prompts = [
     ...routines.schedules.map((schedule, index) => [`schedules.${index}`, schedule.prompt] as const),
     ...routines.events.map((event, index) => [`events.${index}`, event.prompt] as const)
   ]
   return prompts.flatMap(([at, text]) =>
-    kinds.flatMap(({ kind, known, where }) =>
+    kinds.flatMap(({ kind, known, where, key }) =>
       [...text.matchAll(MENTION(kind))]
         .map((match) => match[1] ?? '')
-        .filter((name) => !known.has(name))
+        .filter((name) => !known.has(key(name)))
         .map((name) => ({
           file: 'ROUTINES.md',
           message: `${at}: names the "${name}" ${kind}, which is not in ${where}`
