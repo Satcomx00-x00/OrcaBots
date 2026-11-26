@@ -19,7 +19,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
    ```
 
    That creates a service account that can read workloads, nodes, volumes and metrics, and cannot read Secrets or change anything ([`k8s/read-only-rbac.yaml`](../../k8s/read-only-rbac.yaml)). `kubectl config get-clusters` lists cluster names. The token expires after 30 days, or sooner if your cluster caps it: run the second command again when it does. Run these yourself; never paste a token into the bot's chat.
-2. **Tell the bot the context's name** (`orca-bots`), never your admin context. On its first run it checks the context can't change anything.
+2. **Tell the bot the context's name** (`orca-bots`), never your admin context. At the start of every run it checks the context can't change anything, and it refuses to work in a cluster where it can.
 3. **Connect GitHub.** Accept the **Connect** card the bot offers in its first chat, and pick the orgs or repos it may read deploys from and file issues in. Skip if you don't use GitHub.
 4. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab.
 5. **Answer the bot's first questions:**
@@ -40,7 +40,9 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 
 ## Good to know
 
-- It only reads the cluster: `get`, `describe`, `logs`, `top`. It never applies, deletes, edits, scales, restarts or execs.
+- It only reads the cluster, and two locks keep it that way. The cluster's own access rules: the read-only identity above can't change anything. And `kubectl-ro.sh`, a script in the bot's skill folder that every command goes through: it allows `get`, `describe`, `logs`, `top`, `events`, `explain` and `auth can-i`, and refuses the rest.
+- It never writes out a command that changes the cluster, even for you to run. It names the object and says what should happen; how is yours.
+- The script needs a POSIX shell (`sh`). On Windows, run the bot under WSL or on a Linux or macOS paired server.
 - It never reads a Secret's values, and it describes instead of quoting secrets or personal data it sees in logs.
 - It checks nodes, pods, workloads, jobs, volume claims, autoscalers, cert-manager certificates and warning events.
 - It never calls the cluster healthy: it says what it checked and what it found.

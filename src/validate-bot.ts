@@ -1,9 +1,10 @@
 import { readdir, readFile } from 'node:fs/promises'
-import { basename, join } from 'node:path'
+import { basename, join, relative, sep } from 'node:path'
 import type * as z from 'zod'
 import { type Routines, RoutinesSchema, SkillFrontmatterSchema } from './bot-schema.ts'
 import { splitFrontmatter } from './frontmatter.ts'
 import { ORCA_LINK_LIMITS } from './orca-events.ts'
+import { importLineProblem, importPathProblem } from './orca-import-scan.ts'
 
 export type Issue = { file: string; message: string }
 
@@ -128,13 +129,41 @@ function checkRoutines(text: string | null, skills: ReadonlySet<string>): Issue[
   return parsed.success ? checkMentions(parsed.data, skills) : zodIssues('ROUTINES.md', parsed.error)
 }
 
+/** Files the new bot is built from: its soul, its routines and everything in its skills. */
+async function importedFiles(dir: string): Promise<string[]> {
+  const skills = await readdir(join(dir, 'skills'), { withFileTypes: true, recursive: true }).catch(() => [])
+  const nested = skills
+    .filter((entry) => entry.isFile())
+    .map((entry) => relative(dir, join(entry.parentPath, entry.name)).split(sep).join('/'))
+  return ['SOUL.md', 'ROUTINES.md', ...nested.sort()]
+}
+
+/** Lines and files Orca's importer would leave out, so the new bot would never see them. */
+async function checkImportReads(dir: string): Promise<Issue[]> {
+  const issues: Issue[] = []
+  for (const file of await importedFiles(dir)) {
+    const refused = importPathProblem(file)
+    if (refused) {
+      issues.push({ file, message: refused })
+      continue
+    }
+    const text = await readText(join(dir, file))
+    for (const [index, line] of (text ?? '').split(/\r?\n/).entries()) {
+      const problem = importLineProblem(line)
+      if (problem) issues.push({ file, message: `line ${index + 1} ${problem}` })
+    }
+  }
+  return issues
+}
+
 /** Everything that would stop Orca's importer from bringing this bot over as written. */
 export async function validateBot(dir: string): Promise<Issue[]> {
-  const [soul, routines, readme, skills] = await Promise.all([
+  const [soul, routines, readme, skills, reads] = await Promise.all([
     readText(join(dir, 'SOUL.md')),
     readText(join(dir, 'ROUTINES.md')),
     readText(join(dir, 'README.md')),
-    checkSkills(dir)
+    checkSkills(dir),
+    checkImportReads(dir)
   ])
   return [
     ...checkFolder(dir),
@@ -142,6 +171,7 @@ export async function validateBot(dir: string): Promise<Issue[]> {
     ...checkReadme(readme),
     ...skills.issues,
     ...checkSkillCount(skills.names),
-    ...checkRoutines(routines, skills.names)
+    ...checkRoutines(routines, skills.names),
+    ...reads
   ]
 }

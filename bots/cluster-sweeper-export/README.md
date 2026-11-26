@@ -19,7 +19,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
    ```
 
    That creates a service account that can read workloads, nodes, volumes and metrics, and cannot read Secrets or change anything ([`k8s/read-only-rbac.yaml`](../../k8s/read-only-rbac.yaml)). `kubectl config get-clusters` lists cluster names. The token expires after 30 days, or sooner if your cluster caps it: run the second command again when it does. Run these yourself; never paste a token into the bot's chat.
-2. **Tell the bot the context's name** (`orca-bots`), never your admin context. On its first run it checks the context can't change anything.
+2. **Tell the bot the context's name** (`orca-bots`), never your admin context. At the start of every run it checks the context can't change anything, and it refuses to work in a cluster where it can.
 3. **Connect GitHub.** Accept the **Connect** card the bot offers in its first chat, and pick the orgs or repos it may read pull requests from and open pull requests in. Skip if you don't use GitHub.
 4. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab.
 5. **Answer the bot's first questions:**
@@ -37,12 +37,14 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 ## Check it works
 
 - Ask the bot: "Sweep the cluster now." You should get at most twenty leftovers, biggest first, each with its age and size, why it looks unused, how sure the bot is, and how to remove it.
-- Say "keep the second one". It should stop reporting it. Say "remove the first" for something defined in Git. It should open one pull request or merge request removing only that.
+- Say "keep the second one". It should stop reporting it. Say "remove the first" for something defined in Git that holds no data. It should open one pull request or merge request removing only that.
 
 ## Good to know
 
-- It never deletes or scales anything. For a leftover that isn't in Git it gives you the exact command to run yourself.
-- It only reads the cluster: `get`, `describe`, `logs`, `top`. It never applies, deletes, edits, scales, restarts or execs.
+- It never deletes or scales anything. For a leftover that isn't in Git, or that holds data, it tells you what and where; removing it is yours.
+- It only reads the cluster, and two locks keep it that way. The cluster's own access rules: the read-only identity above can't change anything. And `kubectl-ro.sh`, a script in the bot's skill folder that every command goes through: it allows `get`, `describe`, `logs`, `top`, `events`, `explain` and `auth can-i`, and refuses the rest.
+- It never writes out a command that changes the cluster, even for you to run. It names the object and says what should happen; how is yours.
+- The script needs a POSIX shell (`sh`). On Windows, run the bot under WSL or on a Linux or macOS paired server.
 - Anything that holds data is never rated better than "check first", and the report says what to back up or look at.
 - It looks for unmounted volume claims, released volumes, namespaces of closed pull requests or merge requests, load balancers with nothing behind them, workloads at zero, finished jobs, empty namespaces and unreferenced ConfigMaps.
 - With the read-only access above it can't list Secrets, so it skips unused Secrets and says so. If your own context may list them, it reads their names only.

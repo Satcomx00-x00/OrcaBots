@@ -41,7 +41,12 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 | [Right-sizer](bots/right-sizer-export)         | Wednesdays 2 PM  | Compares CPU and memory requests with seven days of use: the most oversized and the most at risk     |
 | [Cluster sweeper](bots/cluster-sweeper-export) | Tuesdays 2 PM    | Finds volumes, namespaces and load balancers nobody uses, and says how to remove each safely         |
 
-The cluster bots only read: `kubectl get`, `describe`, `logs` and `top`, through a context you name. They never read a Secret's values, and every change they propose is a pull request or merge request to your manifests repo. [`k8s/read-only-rbac.yaml`](k8s/read-only-rbac.yaml) sets up a read-only identity for them.
+The cluster bots only read, and two locks keep it that way:
+
+- **The cluster's access rules.** [`k8s/read-only-rbac.yaml`](k8s/read-only-rbac.yaml) sets up an identity that can list and read, cannot change anything and cannot read Secrets. Each bot checks at the start of every run that its context can't change the cluster, and stops if it can.
+- **A read-only script.** Every `kubectl` call goes through [`kubectl-ro.sh`](k8s/kubectl-ro.sh), shipped inside each cluster bot's skill. It allows `get`, `describe`, `logs`, `top`, `events`, `explain` and `auth can-i`, and refuses the rest: `delete`, `apply`, `patch`, `scale`, `exec`, another context, another identity, a Secret's values.
+
+They never write out a command that changes the cluster, even for you to run. Every change they propose is a pull request or merge request to your manifests repo.
 
 The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
@@ -109,7 +114,7 @@ bots/<name>-export/
 ├── SOUL.md                 # opening paragraph (what it's for), ## How I work, ## Never
 ├── README.md               # for the owner: ## After install (connectors, webhooks, turning automations on)
 ├── ROUTINES.md             # YAML frontmatter: connectors, schedules, events
-└── skills/<skill>/SKILL.md # frontmatter name must equal the folder name
+└── skills/<skill>/SKILL.md # frontmatter name must equal the folder name; scripts it uses sit beside it
 ```
 
 `ROUTINES.md` frontmatter:
@@ -132,7 +137,7 @@ events:
     prompt: Do Z through the GitLab connector.
 ```
 
-`bun run validate` checks each folder the way Orca's importer will need it: the sections, the cron syntax, that each event's source sends it and its connector is listed, that every "the X skill", "the X tool" or "the X connector" in a prompt exists under `skills/`, `tools` or `connectors`, and that nothing exceeds what one share link carries. Event names and link limits mirror Orca in [`src/orca-events.ts`](src/orca-events.ts).
+`bun run validate` checks each folder the way Orca's importer will need it: the sections, the cron syntax, that each event's source sends it and its connector is listed, that every "the X skill", "the X tool" or "the X connector" in a prompt exists under `skills/`, `tools` or `connectors`, that no line would be left out by the importer for looking like a secret, and that nothing exceeds what one share link carries. Event names and link limits mirror Orca in [`src/orca-events.ts`](src/orca-events.ts).
 
 ## Develop
 

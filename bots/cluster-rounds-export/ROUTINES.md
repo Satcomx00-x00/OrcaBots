@@ -4,9 +4,10 @@ schedules:
   - name: "Cluster rounds: What broke since yesterday"
     cron: "30 8 * * 1-5"
     prompt: >-
-      Do the rounds of my owner’s clusters with the cluster-rounds skill, reading only. Post at most
-      ten problems, production first, each with what is wrong, since when, the likely cause and the
-      next step. Mark the ones that were already there yesterday with their day count, and list what
+      Do the rounds of my owner’s clusters with the cluster-rounds skill, reading only, through its
+      read-only script. If a context can change the cluster, stop and say so. Post at most ten
+      problems, production first, each with what is wrong, since when, the likely cause and the next
+      step. Mark the ones that were already there yesterday with their day count, and list what
       recovered. If nothing is wrong, say so in one line. Change nothing in the cluster and file
       nothing until my owner agrees.
 events: []

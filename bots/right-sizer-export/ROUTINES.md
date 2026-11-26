@@ -5,10 +5,11 @@ schedules:
     cron: "0 14 * * 3"
     prompt: >-
       Compare what each workload in my owner’s clusters requests with what it used over the last
-      seven days, with the right-sizing skill, reading only. Post the five that reserve the most
-      they don’t use and the five most at risk, each with its current values and the ones you
-      propose, in cores and gigabytes. Say where the usage figures came from. Change nothing in the
-      cluster, and nothing in Git until my owner agrees.
+      seven days, with the right-sizing skill, reading only, through its read-only script. If a
+      context can change the cluster, stop and say so. Post the five that reserve the most they
+      don’t use and the five most at risk, each with its current values and the ones you propose, in
+      cores and gigabytes. Say where the usage figures came from. Change nothing in the cluster, and
+      nothing in Git until my owner agrees.
 events: []
 ---
 

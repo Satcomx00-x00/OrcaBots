@@ -200,6 +200,32 @@ describe('validateBot', () => {
     expect(await messages({ ...VALID, 'ROUTINES.md': twice })).toEqual(['ROUTINES.md: events: names must be unique'])
   })
 
+  it('rejects a line Orca would leave out for looking like a secret', async () => {
+    const soul = SOUL.replace('Change a file', "Read a Secret's values: no yaml. Change a file")
+    expect(await messages({ ...VALID, 'SOUL.md': soul })).toEqual([
+      'SOUL.md: line 9 looks like it holds a secret, so the importer leaves it out'
+    ])
+    expect(
+      await messages({
+        ...VALID,
+        'SOUL.md': SOUL.replace('Change a file', 'Never read what a Secret holds, or change a file')
+      })
+    ).toEqual([])
+  })
+
+  it('rejects a URL query and a file name Orca would not read', async () => {
+    expect(
+      await messages({
+        ...VALID,
+        'skills/agent-session-review/SKILL.md': `${SKILL}\nOpen https://example.com/search?q=agents first.\n`,
+        'skills/agent-session-review/tokens.md': 'How tokens are counted.\n'
+      })
+    ).toEqual([
+      "skills/agent-session-review/SKILL.md: line 8 has a URL with a query, which the importer cuts off at the '?'",
+      'skills/agent-session-review/tokens.md: has a name the importer never reads'
+    ])
+  })
+
   it('reports a missing file instead of throwing', async () => {
     const { 'ROUTINES.md': _, ...rest } = VALID
     expect(await messages(rest)).toEqual(['ROUTINES.md: missing'])
