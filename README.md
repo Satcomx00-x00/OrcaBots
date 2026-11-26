@@ -24,13 +24,14 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 
 **Your sprint (GitLab)**
 
-| Bot                                                    | Runs                                                  | What it does                                                                                         |
-| ------------------------------------------------------ | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [Sprint planner](bots/sprint-planner-export)           | Fridays 10 AM, when the sprint is ending              | Drafts the next sprint from the backlog, sized to the team's velocity, with what isn't ready and why |
-| [Estimate calibrator](bots/estimate-calibrator-export) | Mondays 11 AM, after a sprint ended                   | Compares estimates with what the work took and shows which kinds of story run over                   |
-| [Sprint guardian](bots/sprint-guardian-export)         | Weekdays 9:30 AM, and when an issue enters the sprint | Says whether the sprint is on track, and what each mid-sprint addition costs                         |
-| [Blocker chaser](bots/blocker-chaser-export)           | Weekdays 9 AM                                         | Lists what is stuck, who can move it and the smallest next step                                      |
-| [Retro miner](bots/retro-miner-export)                 | Fridays 2 PM, around the end of a sprint              | Brings the sprint's facts to the retro, three talking points, and where last retro's actions stand   |
+| Bot                                                    | Runs                                                  | What it does                                                                                                                  |
+| ------------------------------------------------------ | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [Sprint planner](bots/sprint-planner-export)           | Fridays 10 AM, when the sprint is ending              | Drafts the next sprint from the backlog, sized to the team's velocity, with what isn't ready and why                          |
+| [Estimate calibrator](bots/estimate-calibrator-export) | Mondays 11 AM, after a sprint ended                   | Compares estimates with what the work took and shows which kinds of story run over                                            |
+| [Sprint guardian](bots/sprint-guardian-export)         | Weekdays 9:30 AM, and when an issue enters the sprint | Says whether the sprint is on track, and what each mid-sprint addition costs                                                  |
+| [Blocker chaser](bots/blocker-chaser-export)           | Weekdays 9 AM                                         | Lists what is stuck, who can move it and the smallest next step                                                               |
+| [Retro miner](bots/retro-miner-export)                 | Fridays 2 PM, around the end of a sprint              | Brings the sprint's facts to the retro, three talking points, and where last retro's actions stand                            |
+| [Sprint scribe](bots/sprint-scribe-export)             | Weekdays 5:30 PM                                      | Logs your real work on the board: one tracking note per issue, edited in place, and an issue for each piece of unplanned work |
 
 **Your cluster (Kubernetes)**
 
@@ -48,7 +49,7 @@ The cluster bots only read, and two locks keep it that way:
 
 They never write out a command that changes the cluster, even for you to run. Every change they propose is a pull request or merge request to your manifests repo.
 
-The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
+The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. All of them wait for your yes before changing anything, except Sprint scribe: after you approve its first preview, it keeps your own issues' tracking notes and creates your unplanned issues on its own. Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
 ## Install a bot
 
@@ -75,6 +76,7 @@ In Orca: **New bot → From a link**, paste the bot's link, review what it bring
 | Sprint guardian      | _not published yet_ |
 | Blocker chaser       | _not published yet_ |
 | Retro miner          | _not published yet_ |
+| Sprint scribe        | _not published yet_ |
 | Cluster rounds       | _not published yet_ |
 | Drift detector       | _not published yet_ |
 | Right-sizer          | _not published yet_ |
@@ -105,7 +107,7 @@ Each bot folder has a `README.md` with its own steps, for example [`bots/agent-c
 - GitLab sends Orca no events of its own, so GitLab routines are webhooks: copy the URL from the automation's card (**Copy URL**) into the GitLab project's **Settings → Webhooks**, and tick the events that bot's README names.
 - No keys or logins: there are none in this repo, and Orca never copies them.
 
-Agent coach, Skill miner, Cost auditor, Prompt doctor and Rule keeper read sessions only where **Settings → Agent Session History** is on, one computer at a time.
+Agent coach, Skill miner, Cost auditor, Prompt doctor, Rule keeper and Sprint scribe read sessions only where **Settings → Agent Session History** is on, one computer at a time.
 
 ## Bot folder layout
 
