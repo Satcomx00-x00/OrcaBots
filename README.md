@@ -24,14 +24,14 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 
 **Your sprint (GitLab)**
 
-| Bot                                                    | Runs                                                  | What it does                                                                                                                  |
-| ------------------------------------------------------ | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [Sprint planner](bots/sprint-planner-export)           | Fridays 10 AM, when the sprint is ending              | Drafts the next sprint from the backlog, sized to the team's velocity, with what isn't ready and why                          |
-| [Estimate calibrator](bots/estimate-calibrator-export) | Mondays 11 AM, after a sprint ended                   | Compares estimates with what the work took and shows which kinds of story run over                                            |
-| [Sprint guardian](bots/sprint-guardian-export)         | Weekdays 9:30 AM, and when an issue enters the sprint | Says whether the sprint is on track, and what each mid-sprint addition costs                                                  |
-| [Blocker chaser](bots/blocker-chaser-export)           | Weekdays 9 AM                                         | Lists what is stuck, who can move it and the smallest next step                                                               |
-| [Retro miner](bots/retro-miner-export)                 | Fridays 2 PM, around the end of a sprint              | Brings the sprint's facts to the retro, three talking points, and where last retro's actions stand                            |
-| [Sprint scribe](bots/sprint-scribe-export)             | Weekdays 5:30 PM                                      | Logs your real work on the board: one tracking note per issue, edited in place, and an issue for each piece of unplanned work |
+| Bot                                                    | Runs                                                  | What it does                                                                                                                                                                               |
+| ------------------------------------------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Sprint planner](bots/sprint-planner-export)           | Fridays 10 AM, when the sprint is ending              | Drafts the next sprint from the backlog, sized to the team's velocity, with what isn't ready and why                                                                                       |
+| [Estimate calibrator](bots/estimate-calibrator-export) | Mondays 11 AM, after a sprint ended                   | Compares estimates with what the work took and shows which kinds of story run over                                                                                                         |
+| [Sprint guardian](bots/sprint-guardian-export)         | Weekdays 9:30 AM, and when an issue enters the sprint | Says whether the sprint is on track, and what each mid-sprint addition costs                                                                                                               |
+| [Blocker chaser](bots/blocker-chaser-export)           | Weekdays 9 AM                                         | Lists what is stuck, who can move it and the smallest next step                                                                                                                            |
+| [Retro miner](bots/retro-miner-export)                 | Fridays 2 PM, around the end of a sprint              | Brings the sprint's facts to the retro, three talking points, and where last retro's actions stand                                                                                         |
+| [Sprint scribe](bots/sprint-scribe-export)             | Weekdays 5:30 PM                                      | Logs your real work on the board: one tracking note per issue, edited in place, an issue for each piece of unplanned work, and weight, time, merge request, parent and priority kept right |
 
 **Your cluster (Kubernetes)**
 
@@ -49,7 +49,7 @@ The cluster bots only read, and two locks keep it that way:
 
 They never write out a command that changes the cluster, even for you to run. Every change they propose is a pull request or merge request to your manifests repo.
 
-The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. All of them wait for your yes before changing anything, except Sprint scribe: after you approve its first preview, it keeps your own issues' tracking notes and creates your unplanned issues on its own. Apart from that, nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
+The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. All of them wait for your yes before changing anything, except Sprint scribe: after you approve its first preview, it keeps your own issues' tracking notes and fields, and creates your unplanned issues, on its own. Apart from that, nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
 ## Install a bot
 

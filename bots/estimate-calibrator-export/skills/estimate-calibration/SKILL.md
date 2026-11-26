@@ -21,7 +21,7 @@ Read GitLab only through the GitLab connector. When it can't give you something 
 
 For each issue closed in the sprint:
 
-- **Estimate:** its weight or time estimate. Unsized issues are counted apart.
+- **Estimate:** its weight or time estimate. Unsized issues are counted apart. When the issue has a Sprint scribe tracking note that says "planned <n>", the estimate is that planned weight, not the current one: the current one was corrected afterwards.
 - **Cycle time:** working days from start to closed. Start is the first of: moved to an in-progress list or label, first merge request opened, first commit that mentions it.
 - **Time spent,** when the team logs it.
 - **Effort signs:** number of merge requests, review rounds, whether it was reopened, whether it carried over.

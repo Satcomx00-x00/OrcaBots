@@ -8,6 +8,8 @@ One per issue. The first line is the marker that lets you find the note again: k
 <!-- sprint-scribe:log -->
 **Status:** In progress · **Updated:** 2026-11-27 · **Sprint:** Sprint 42
 
+**Weight:** 5 (planned 3) · **Time:** 9.5 h spent, 8 h estimated · **Priority:** high · **Parent:** &12 Faster exports
+
 **Progress**
 - Export no longer times out for accounts under 50k rows.
 - Large accounts still fail; the query needs paging.
@@ -16,15 +18,13 @@ One per issue. The first line is the marker that lets you find the note again: k
 
 **Blocked by:** nothing
 
-**Effort so far:** about 3.5 h over 2 days
-
 **Links:** !128 (open, pipeline passed) · branch `482-export-timeout`
 
 <details>
 <summary>Log</summary>
 
-- 2026-11-27 · In progress · Fixed the timeout for small accounts; found the paging problem. About 2 h.
-- 2026-11-26 · In progress · Reproduced the timeout and traced it to the export query. About 1.5 h.
+- 2026-11-27 · In progress · Fixed the timeout for small accounts; found the paging problem. 5.5 h. Weight 3 → 5: 9.5 h spent, and 3 stands for up to 8 h.
+- 2026-11-26 · In progress · Reproduced the timeout and traced it to the export query. 4 h.
 
 </details>
 
@@ -34,7 +34,10 @@ One per issue. The first line is the marker that lets you find the note again: k
 - **Status** is one of Not started, In progress, In review, Blocked, Done.
 - **Progress** says what is true now, in two to four lines. Not what was done hour by hour.
 - **Blocked by** names the thing, and the issue or person that can lift it, without an @.
-- Leave out **Effort so far** and the durations in the log when the setup says not to show effort.
+- **Weight** shows "(planned <n>)" from the first time you change it, and keeps it for good. Before that, just the weight.
+- **Time** comes from the issue's own time tracking, read back after you log.
+- Leave out **Time** and the durations in the log when the setup says not to show effort. Time tracking on the issue is logged either way.
+- Each weight change gets its reason on that day's log line.
 - Keep the last ten log lines. Fold older ones into one line: "Earlier: started 2026-11-12, 6 days of work."
 
 For the sprint's "interruptions and small requests" issue, the Progress list holds one line per interruption: date, what was asked, by whom, about how long.
@@ -42,6 +45,42 @@ For the sprint's "interruptions and small requests" issue, the Progress list hol
 ## A new issue
 
 Pick the one that fits. Fill every section; write "not recorded" where you don't know, never a guess.
+
+### Implementation
+
+Use these five sections, with these names, in this order.
+
+```markdown
+## Context
+
+<What exists today, what is needed, and why. Then where it came from: unplanned, asked for by <name or team> on <date>, through <where>; it couldn't wait because <reason>.>
+
+## Scope
+
+**In:**
+
+- <What this change covers.>
+
+**Out:**
+
+- <What it leaves alone, and where that is tracked if anywhere.>
+
+## Acceptance Criteria
+
+- [ ] Given <starting point>, when <action>, then <result>.
+- [ ] ...
+
+## Verification
+
+- <The tests added or changed, and the command that runs them.>
+- <What to check by hand, where: the page, endpoint or job, in which environment.>
+- <What the pipeline must show.>
+
+## Risks and Rollback
+
+- **Risks:** <what could break, who would be affected, how you would notice.>
+- **Rollback:** <how to undo it: revert the merge request, turn off the flag, undo the migration, and how long that takes.>
+```
 
 ### User story
 
