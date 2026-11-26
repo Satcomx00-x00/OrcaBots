@@ -36,6 +36,10 @@ A link carries the soul, skills, schedules, the GitHub and GitLab connectors, an
 
 To create the bot on a paired server instead of this computer, copy the folder to that server first.
 
+### After install
+
+Each bot folder has a `README.md` with its own steps: [Agent coach](bots/agent-coach-export/README.md), [Skill miner](bots/skill-miner-export/README.md), [Fresh-eyes user](bots/fresh-eyes-export/README.md).
+
 ### What you get
 
 - Its soul, its skills, and its schedules, **paused**. Turn them on in the bot's Automations once the first run looks right.
@@ -51,6 +55,7 @@ Agent coach and Skill miner read sessions only where **Settings → Agent Sessio
 ```text
 bots/<name>-export/
 ├── SOUL.md                 # opening paragraph (what it's for), ## How I work, ## Never
+├── README.md               # for the owner: ## After install (connectors, webhooks, turning automations on)
 ├── ROUTINES.md             # YAML frontmatter: connectors, schedules, events
 └── skills/<skill>/SKILL.md # frontmatter name must equal the folder name
 ```

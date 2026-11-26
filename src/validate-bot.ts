@@ -32,6 +32,16 @@ function checkFolder(dir: string): Issue[] {
     : [{ file: '.', message: 'folder must end in "-export" so Orca names the bot from it' }]
 }
 
+const AFTER_INSTALL = '## After install'
+
+/** The owner's steps once the bot is created: connectors, webhooks, turning automations on. */
+function checkReadme(text: string | null): Issue[] {
+  if (text === null) return [{ file: 'README.md', message: 'missing' }]
+  return text.split(/\r?\n/).some((line) => line.trim() === AFTER_INSTALL)
+    ? []
+    : [{ file: 'README.md', message: `missing "${AFTER_INSTALL}" section` }]
+}
+
 function checkSoul(text: string | null): Issue[] {
   if (text === null) return [{ file: 'SOUL.md', message: 'missing' }]
   const issues: Issue[] = []
@@ -120,14 +130,16 @@ function checkRoutines(text: string | null, skills: ReadonlySet<string>): Issue[
 
 /** Everything that would stop Orca's importer from bringing this bot over as written. */
 export async function validateBot(dir: string): Promise<Issue[]> {
-  const [soul, routines, skills] = await Promise.all([
+  const [soul, routines, readme, skills] = await Promise.all([
     readText(join(dir, 'SOUL.md')),
     readText(join(dir, 'ROUTINES.md')),
+    readText(join(dir, 'README.md')),
     checkSkills(dir)
   ])
   return [
     ...checkFolder(dir),
     ...checkSoul(soul),
+    ...checkReadme(readme),
     ...skills.issues,
     ...checkSkillCount(skills.names),
     ...checkRoutines(routines, skills.names)

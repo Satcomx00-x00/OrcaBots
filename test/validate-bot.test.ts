@@ -41,6 +41,7 @@ type Files = Record<string, string>
 const VALID: Files = {
   'SOUL.md': SOUL,
   'ROUTINES.md': ROUTINES,
+  'README.md': '# Agent coach: after install\n\n## After install\n\n1. Connect GitHub.\n',
   'skills/agent-session-review/SKILL.md': SKILL
 }
 
@@ -81,6 +82,14 @@ describe('validateBot', () => {
     expect(await messages({ ...VALID, 'SOUL.md': '## How I work\n\nx\n\n## Never\n\ny\n' })).toEqual([
       'SOUL.md: must open with a paragraph saying what the bot is for'
     ])
+  })
+
+  it('needs README.md with its After install steps', async () => {
+    expect(await messages({ ...VALID, 'README.md': '# Agent coach\n' })).toEqual([
+      'README.md: missing "## After install" section'
+    ])
+    const { 'README.md': _, ...rest } = VALID
+    expect(await messages(rest)).toEqual(['README.md: missing'])
   })
 
   it('needs each skill to name its own folder', async () => {
