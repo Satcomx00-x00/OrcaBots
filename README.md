@@ -1,8 +1,8 @@
 # orca-bots
 
-Importable bots for [Orca](https://github.com/stablyai/orca) that watch your agents and your app.
+Importable bots for [Orca](https://github.com/stablyai/orca) that watch your agents, your app and your sprint.
 
-**Watching your agents**
+**Your agents**
 
 | Bot                                        | Runs                                                          | What it does                                                                                             |
 | ------------------------------------------ | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -11,8 +11,9 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 | [Cost auditor](bots/cost-auditor-export)   | Fridays 9 AM                                                  | Ranks sessions by turns and hours against what they shipped, and says what would have made each cheaper  |
 | [Prompt doctor](bots/prompt-doctor-export) | Mondays 9 AM                                                  | Finds the session openings that needed the most follow-up and writes a template for each kind of request |
 | [Rule keeper](bots/rule-keeper-export)     | When an agent opens a PR or MR, and the 1st of each month     | Checks each change against the rules in AGENTS.md / CLAUDE.md, and finds the rules nobody needs          |
+| [Night shift](bots/night-shift-export)     | Weekdays 5 PM and 8 AM                                        | Starts one agent per small, ready issue overnight and has draft PRs or MRs waiting in the morning        |
 
-**Watching your app**
+**Your app**
 
 | Bot                                                      | Runs                                                         | What it does                                                                                               |
 | -------------------------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
@@ -21,7 +22,7 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 | [Accessibility walker](bots/accessibility-walker-export) | Tuesdays 10 AM, and after a deploy                           | Does the main job keyboard-only and zoomed in, checks names and contrast, and cites the WCAG 2.2 criterion |
 | [Copy checker](bots/copy-checker-export)                 | Thursdays 2 PM                                               | Lists typos, things called by two names, placeholder text and error messages that don't help               |
 
-**Running your sprint (GitLab)**
+**Your sprint (GitLab)**
 
 | Bot                                                    | Runs                                                  | What it does                                                                                         |
 | ------------------------------------------------------ | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -48,6 +49,7 @@ In Orca: **New bot → From a link**, paste the bot's link, review what it bring
 | Cost auditor         | _not published yet_ |
 | Prompt doctor        | _not published yet_ |
 | Rule keeper          | _not published yet_ |
+| Night shift          | _not published yet_ |
 | Fresh-eyes user      | _not published yet_ |
 | Regression walker    | _not published yet_ |
 | Accessibility walker | _not published yet_ |
