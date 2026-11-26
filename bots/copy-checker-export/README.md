@@ -11,7 +11,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
    - the app's language and spelling (US or UK English, for instance);
    - a list of product terms, if you have one.
 2. **Connect GitHub.** Accept the **Connect** card the bot offers in its first chat, and pick the orgs or repos it may file issues in or fix text in. Skip if you don't use GitHub.
-3. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab.
+3. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab. If the sign-in is refused, access to the GitLab MCP server has to be allowed first: by an owner of your top-level group on GitLab.com, or by an administrator on self-managed GitLab.
 4. **Tell the bot where the app's code lives,** if you want text fixes as a PR or MR and not only a list.
 5. **Turn the automation on** in **Automations** once the first list looks right:
 

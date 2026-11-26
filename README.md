@@ -102,7 +102,8 @@ Each bot folder has a `README.md` with its own steps, for example [`bots/agent-c
 
 - Its soul, its skills, and its schedules, **paused**. Turn them on in the bot's Automations once the first run looks right.
 - GitHub routines wait until you connect GitHub for that bot; it offers the Connect card.
-- Sprint bots ask in their first chat whether a sprint is an iteration or a milestone, and how you size stories. Their schedules stay quiet outside the end of a sprint.
+- The GitLab connector is GitLab's own MCP server, available on every tier. Access to it has to be allowed for your top-level group (GitLab.com) or your instance (self-managed) before a bot can sign in.
+- Sprint bots ask in their first chat whether a sprint is an iteration or a milestone, and how you size stories. Their schedules stay quiet outside the end of a sprint. They also need `glab`, GitLab's command-line tool, signed in: the connector has no call for iterations, weights or editing a note.
 - The GitLab connector, signed in once in the browser. For self-managed or Dedicated GitLab, tell the bot your address; it reconnects GitLab at `https://<host>/api/v4/mcp`.
 - GitLab sends Orca no events of its own, so GitLab routines are webhooks: copy the URL from the automation's card (**Copy URL**) into the GitLab project's **Settings → Webhooks**, and tick the events that bot's README names.
 - No keys or logins: there are none in this repo, and Orca never copies them.

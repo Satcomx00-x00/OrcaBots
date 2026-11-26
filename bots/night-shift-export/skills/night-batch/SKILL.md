@@ -58,7 +58,7 @@ Never: merge, deploy, run against production, change CI or secrets, or touch ano
 ## When a worker reports
 
 1. Read the report, then the diff. Check it stays inside the brief's scope and that the checks it names ran.
-2. If it does: open a **draft** linked to the issue. `gh pr create --draft --head <branch> --title "<title>" --body-file <file>` on GitHub; a draft merge request through the GitLab connector on GitLab. The body says what changed, how it was checked, what the agent wasn't sure of, and that an agent wrote it overnight.
+2. If it does: open a **draft** linked to the issue. `gh pr create --draft --head <branch> --title "<title>" --body-file <file>` on GitHub; a merge request through the GitLab connector on GitLab, with a title that starts with `Draft:`, which is what makes it a draft there. The body says what changed, how it was checked, what the agent wasn't sure of, and that an agent wrote it overnight.
 3. If it went outside scope, failed its checks or stopped: open nothing. Keep the branch and note why in the log.
 4. If it asks a question the issue doesn't answer: don't guess. Keep it for the morning report.
 
@@ -74,5 +74,5 @@ One line each. When the night produced nothing, say why.
 ## Limits
 
 - Start nothing without your owner's yes or beyond the standing yes's limits.
-- Everything you open is a draft. Never merge, approve, mark ready or push to the default branch.
+- Everything you open is a draft. Never merge, approve, mark ready or push to the default branch. The GitLab connector can merge and close; you never use it for that.
 - Never close, relabel or reassign an issue.

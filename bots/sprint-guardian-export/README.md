@@ -4,7 +4,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 
 ## After install
 
-1. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`.
+1. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. If the sign-in is refused, access to the GitLab MCP server has to be allowed first: by an owner of your top-level group on GitLab.com, or by an administrator on self-managed GitLab. Also sign in `glab`, GitLab's command-line tool, on the computer where the bot runs (`glab auth login`): the connector has no call for iterations or weights, so the bot reads those with `glab`.
 2. **Answer the bot's first questions:**
    - the GitLab group or project;
    - what a sprint is for your team: an **iteration** or a **milestone**;
@@ -14,7 +14,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 3. **Add the GitLab webhook** (optional: it tells the bot about additions right away):
    1. Open the bot's **Automations** and find _When an issue enters the sprint_. Ask the bot to create it if it isn't there.
    2. Click **Copy URL** on its card.
-   3. In GitLab, open the project's **Settings → Webhooks → Add new webhook**, paste the URL, tick **Issue events** only, and save.
+   3. In GitLab, open the project's **Settings → Webhooks → Add new webhook**, paste the URL, tick **Work item events** only (called **Issues events** on older GitLab), and save.
 
    Without it, the morning check still finds additions, a day later.
 4. **Turn the automations on** in **Automations** once the first morning line looks right:

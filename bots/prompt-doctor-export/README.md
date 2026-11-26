@@ -7,7 +7,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 1. **Turn on Agent Session History.** Orca **Settings → Agent Session History**, on the computer whose agents you want reviewed. The bot reads one computer at a time and waits until this is on.
 2. **Tell the bot where templates go:** a folder in a repo (for example `prompts/`), or only in its chat.
 3. **Connect GitHub.** Accept the **Connect** card the bot offers in its first chat, and pick the orgs or repos it may add templates to. Skip if you don't use GitHub, or if templates stay in the chat.
-4. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab.
+4. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab. If the sign-in is refused, access to the GitLab MCP server has to be allowed first: by an owner of your top-level group on GitLab.com, or by an administrator on self-managed GitLab.
 5. **Turn the automation on** in **Automations** once you've seen the first templates:
 
    | Automation                              | When         |

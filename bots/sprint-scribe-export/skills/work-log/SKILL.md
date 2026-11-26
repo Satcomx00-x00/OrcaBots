@@ -48,7 +48,7 @@ When you can't decide, don't guess. Put it under "couldn't place" in the summary
 
 ## 3. Planned work: the tracking note
 
-Each issue has exactly one tracking note, written as your owner and edited in place. `templates.md`, beside this skill, has its shape.
+Each issue has exactly one tracking note, written as your owner and edited in place. `templates.md`, beside this skill, has its shape. The GitLab connector can add a note but not edit one, so the note goes through `glab`.
 
 1. **Find it.** Look in `memory/tracking-notes.md` (issue → note id). If it isn't there, list the issue's notes and look for the marker line `<!-- sprint-scribe:log -->`: `glab api "projects/<project>/issues/<iid>/notes?per_page=100"`. `<project>` is the numeric id, or the path with each `/` written as `%2F`.
 2. **Write the whole note again** to a file, from the template: today's status on top, one new line at the top of the log. Keep the earlier log lines as they were.
@@ -86,7 +86,7 @@ Write it to the standard in `templates.md`:
 
 Set: assignee your owner; the current sprint; labels `unplanned` plus the team's type label.
 
-- **Sprint.** A milestone: `milestone_id`. An iteration: the field the connector offers, else one line at the end of the description, `/iteration [cadence:"<cadence name>"] --current`. The short form `/iteration --current` works only when the group has a single cadence.
+- **Sprint.** A milestone: `milestone_id`. An iteration: the connector has no field for it, so set it right after creating, with the `iterationWidget` mutation in `graphql.md`. The current iteration's id comes from `glab api "groups/<group>/iterations?state=current"`; when the group has several cadences, take the one from the cadence in the setup.
 - **Labels.** GitLab creates a label that doesn't exist when you name it, without asking. So check every label first: `glab api "projects/<project>/labels?search=<name>"` must return one with exactly that name. A label that isn't there is left off, and you say so in the summary. Never let one be created. Create it through the GitLab connector, or `glab api --method POST projects/<project>/issues` with `-F` fields and `-F description=@<file>`.
 
 Then set its fields (step 5), add its tracking note (step 3), and read the issue back: right assignee, sprint, labels, weight, parent, priority and time. Whatever didn't take, say in the summary. Add a line in `memory/scribe-log.md`: date, piece of work, issue.

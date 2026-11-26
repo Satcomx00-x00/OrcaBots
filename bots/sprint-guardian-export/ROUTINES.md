@@ -31,4 +31,4 @@ All arrive paused. Turn them on once the first morning line looks right.
 | Weekdays at 9:30 AM | One line: on track, at risk or off track, and what changed since yesterday |
 | An issue enters the sprint (GitLab webhook, optional) | What the addition costs, and what could come out |
 
-The webhook routine needs its URL (Copy URL on the automation's card) added under the project's **Settings → Webhooks** with **Issue events** ticked. Without it, the morning check still finds additions, a day later.
+The webhook routine needs its URL (Copy URL on the automation's card) added under the project's **Settings → Webhooks** with **Work item events** ticked (called **Issues events** on older GitLab). Without it, the morning check still finds additions, a day later.

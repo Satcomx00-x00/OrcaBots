@@ -10,7 +10,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
    - a **test account**, if that job needs signing in. Never your own account or a real password;
    - which deploy environment to walk after each deploy (`production`, `staging`, …).
 2. **Connect GitHub.** Accept the **Connect** card the bot offers, for GitHub deploys and issues. Skip if you don't use GitHub.
-3. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks, for GitLab issues. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab.
+3. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks, for GitLab issues. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab. If the sign-in is refused, access to the GitLab MCP server has to be allowed first: by an owner of your top-level group on GitLab.com, or by an administrator on self-managed GitLab.
 4. **Add the GitLab webhook** (GitLab deploys only):
    1. Open the bot's **Automations** and find _When a GitLab deploy finishes_. Ask the bot to create it if it isn't there.
    2. Click **Copy URL** on its card.

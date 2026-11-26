@@ -12,7 +12,7 @@ Do these once, in order, after **Create**. Everything arrives paused, and the bo
    ```
 
    The bot needs it to edit a note in place. Orca's own GitLab features use it too, so you may already have it.
-3. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`.
+3. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. If the sign-in is refused, access to the GitLab MCP server has to be allowed first: by an owner of your top-level group on GitLab.com, or by an administrator on self-managed GitLab.
 4. **Create the `unplanned` label** in your GitLab group or project, if you don't have one. The bot never invents a label: GitLab would create a missing label silently, so the bot checks each one exists before using it, and leaves it off when it doesn't.
 5. **Answer the bot's first questions:**
    - the GitLab group or project, and what a sprint is for your team: an **iteration** or a **milestone**. With iterations, also the name of your iteration cadence;
@@ -73,6 +73,6 @@ Do these once, in order, after **Create**. Everything arrives paused, and the bo
 - **When it isn't sure where work belongs, it asks** in its summary instead of guessing.
 - **Unplanned issues follow one standard:** a title that names the outcome, and a body from the template for its type. **Implementation:** Context, Scope (In and Out), Acceptance Criteria, Verification, Risks and Rollback. **Bug:** steps, expected, actual. **User story:** as a, I want, so that. **Task:** scope and result. Work that reaches weight 13 is flagged for splitting.
 - **Small interruptions** (under about half an hour, no code change) go as lines in one issue per sprint instead of an issue each.
-- With milestones the bot sets the milestone. With iterations it checks after creating that the issue shows the sprint, and tells you when it doesn't.
+- With milestones the bot sets the milestone. With iterations it sets the current iteration of your cadence right after creating the issue, checks that it took, and tells you when it didn't.
 - If you run **Sprint guardian**, it will report each unplanned issue as an addition to the sprint, and each corrected weight as a resize, with what they cost.
 - No webhooks: this bot runs on its schedule, and when you talk to it.

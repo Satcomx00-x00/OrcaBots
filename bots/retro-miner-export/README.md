@@ -4,7 +4,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
 
 ## After install
 
-1. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`.
+1. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. If the sign-in is refused, access to the GitLab MCP server has to be allowed first: by an owner of your top-level group on GitLab.com, or by an administrator on self-managed GitLab. Also sign in `glab`, GitLab's command-line tool, on the computer where the bot runs (`glab auth login`): the connector has no call for iterations or weights, so the bot reads those with `glab`.
 2. **Answer the bot's first questions:**
    - the GitLab group or project;
    - what a sprint is for your team: an **iteration** or a **milestone**;

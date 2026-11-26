@@ -21,7 +21,7 @@ Do these once, in order, after **Create**. Everything arrives paused, so nothing
    That creates a service account that can read workloads, nodes, volumes and metrics, and cannot read Secrets or change anything ([`k8s/read-only-rbac.yaml`](../../k8s/read-only-rbac.yaml)). `kubectl config get-clusters` lists cluster names. The token expires after 30 days, or sooner if your cluster caps it: run the second command again when it does. Run these yourself; never paste a token into the bot's chat.
 2. **Tell the bot the context's name** (`orca-bots`), never your admin context. At the start of every run it checks the context can't change anything, and it refuses to work in a cluster where it can.
 3. **Connect GitHub.** Accept the **Connect** card the bot offers in its first chat, and pick the orgs or repos it may read manifests from and open pull requests in. Skip if you don't use GitHub.
-4. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab.
+4. **Connect GitLab.** Sign in to the GitLab connector in the browser when the bot asks. For self-managed or Dedicated GitLab, give the bot your address (`gitlab.example.com`); it reconnects at `https://<host>/api/v4/mcp`. Skip if you don't use GitLab. If the sign-in is refused, access to the GitLab MCP server has to be allowed first: by an owner of your top-level group on GitLab.com, or by an administrator on self-managed GitLab.
 5. **Answer the bot's first questions:**
    - which namespaces are production, and which to skip;
    - how you deploy: Argo CD, Flux, Helm from a CI pipeline, or plain manifests;
