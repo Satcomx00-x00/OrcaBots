@@ -21,7 +21,17 @@ Importable bots for [Orca](https://github.com/stablyai/orca) that watch your age
 | [Accessibility walker](bots/accessibility-walker-export) | Tuesdays 10 AM, and after a deploy                           | Does the main job keyboard-only and zoomed in, checks names and contrast, and cites the WCAG 2.2 criterion |
 | [Copy checker](bots/copy-checker-export)                 | Thursdays 2 PM                                               | Lists typos, things called by two names, placeholder text and error messages that don't help               |
 
-Every bot works with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
+**Running your sprint (GitLab)**
+
+| Bot                                                    | Runs                                                  | What it does                                                                                         |
+| ------------------------------------------------------ | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [Sprint planner](bots/sprint-planner-export)           | Fridays 10 AM, when the sprint is ending              | Drafts the next sprint from the backlog, sized to the team's velocity, with what isn't ready and why |
+| [Estimate calibrator](bots/estimate-calibrator-export) | Mondays 11 AM, after a sprint ended                   | Compares estimates with what the work took and shows which kinds of story run over                   |
+| [Sprint guardian](bots/sprint-guardian-export)         | Weekdays 9:30 AM, and when an issue enters the sprint | Says whether the sprint is on track, and what each mid-sprint addition costs                         |
+| [Blocker chaser](bots/blocker-chaser-export)           | Weekdays 9 AM                                         | Lists what is stuck, who can move it and the smallest next step                                      |
+| [Retro miner](bots/retro-miner-export)                 | Fridays 2 PM, around the end of a sprint              | Brings the sprint's facts to the retro, three talking points, and where last retro's actions stand   |
+
+The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
 ## Install a bot
 
@@ -42,6 +52,11 @@ In Orca: **New bot → From a link**, paste the bot's link, review what it bring
 | Regression walker    | _not published yet_ |
 | Accessibility walker | _not published yet_ |
 | Copy checker         | _not published yet_ |
+| Sprint planner       | _not published yet_ |
+| Estimate calibrator  | _not published yet_ |
+| Sprint guardian      | _not published yet_ |
+| Blocker chaser       | _not published yet_ |
+| Retro miner          | _not published yet_ |
 
 Orca only opens its own share links (`https://app.orca.dev/bots/share/<id>` or `orca://bots/share/<id>`), never a GitHub or raw file URL. A link is published once from a bot made from this repo's folder (below): open the bot, **Share**, keep everything ticked, copy the link, and put it in the table above. Publish again after changing a bot folder so the link serves the new version.
 
@@ -63,6 +78,7 @@ Each bot folder has a `README.md` with its own steps, for example [`bots/agent-c
 
 - Its soul, its skills, and its schedules, **paused**. Turn them on in the bot's Automations once the first run looks right.
 - GitHub routines wait until you connect GitHub for that bot; it offers the Connect card.
+- Sprint bots ask in their first chat whether a sprint is an iteration or a milestone, and how you size stories. Their schedules stay quiet outside the end of a sprint.
 - The GitLab connector, signed in once in the browser. For self-managed or Dedicated GitLab, tell the bot your address; it reconnects GitLab at `https://<host>/api/v4/mcp`.
 - GitLab sends Orca no events of its own, so GitLab routines are webhooks: copy the URL from the automation's card (**Copy URL**) into the GitLab project's **Settings → Webhooks**, and tick the events that bot's README names.
 - No keys or logins: there are none in this repo, and Orca never copies them.
