@@ -2,11 +2,11 @@
 
 Importable bots for [Orca](https://github.com/stablyai/orca) that watch your agents and your app.
 
-| Bot                                       | Runs                                                                  | What it does                                                                                             |
-| ----------------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [Agent coach](bots/agent-coach-export)    | Fridays 4 PM, and when an agent's PR or MR is closed unmerged         | Finds where agents loop, stall or get corrected, and proposes one AGENTS.md / CLAUDE.md rule per pattern |
-| [Skill miner](bots/skill-miner-export)    | Mondays 10 AM                                                         | Spots procedures you keep explaining to agents and drafts each as a SKILL.md                             |
-| [Fresh-eyes user](bots/fresh-eyes-export) | Wednesdays 10 AM, and after a GitHub or GitLab deploy                 | Walks your app like a first-time user, desktop and phone, and reports blockers with screenshots          |
+| Bot                                       | Runs                                                          | What it does                                                                                             |
+| ----------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [Agent coach](bots/agent-coach-export)    | Fridays 4 PM, and when an agent's PR or MR is closed unmerged | Finds where agents loop, stall or get corrected, and proposes one AGENTS.md / CLAUDE.md rule per pattern |
+| [Skill miner](bots/skill-miner-export)    | Mondays 10 AM                                                 | Spots procedures you keep explaining to agents and drafts each as a SKILL.md                             |
+| [Fresh-eyes user](bots/fresh-eyes-export) | Wednesdays 10 AM, and after a GitHub or GitLab deploy         | Walks your app like a first-time user, desktop and phone, and reports blockers with screenshots          |
 
 Every bot works with **GitHub** (the GitHub connector, `gh`) and **GitLab** (GitLab's own MCP server, added as the bot's `gitlab` tool). Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
