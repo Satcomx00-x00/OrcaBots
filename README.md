@@ -49,7 +49,7 @@ The cluster bots only read, and two locks keep it that way:
 
 They never write out a command that changes the cluster, even for you to run. Every change they propose is a pull request or merge request to your manifests repo.
 
-The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. All of them wait for your yes before changing anything, except Sprint scribe: after you approve its first preview, it keeps your own issues' tracking notes and creates your unplanned issues on its own. Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
+The agent and app bots work with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). The sprint bots are GitLab only: they read iterations or milestones, issues, merge requests and pipelines through the GitLab connector. All of them wait for your yes before changing anything, except Sprint scribe: after you approve its first preview, it keeps your own issues' tracking notes and creates your unplanned issues on its own. Apart from that, nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
 ## Install a bot
 
