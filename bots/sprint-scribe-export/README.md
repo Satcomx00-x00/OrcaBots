@@ -18,7 +18,8 @@ Do these once, in order, after **Create**. Everything arrives paused, and the bo
    - the GitLab group or project, and what a sprint is for your team: an **iteration** or a **milestone**;
    - which projects it may read your work from. Anything outside them is ignored;
    - the project that gets work belonging to no repo, such as a review or a support request;
-   - the team's labels for each type of issue (implementation, bug, user story, task) and for each **priority** level;
+   - the team's labels for each type of issue (implementation, bug, user story, task);
+   - **priority:** the bot looks up the options of your work items' **Priority** field and asks which one means highest, high, medium and low. Tell it the field's name if it isn't "Priority";
    - what each **weight** stands for in time. The bot shows its default table (below) and uses yours if you change it;
    - the **parent** for unplanned work: an epic or parent issue per area, one for all of it, or none;
    - whether a merge request should get the line `Related to #<n>` (default) or `Closes #<n>`;
@@ -63,8 +64,10 @@ Do these once, in order, after **Create**. Everything arrives paused, and the bo
 - **Time tracking** uses GitLab's own: time spent is logged once a day per issue, and an estimate is set only where there is none. GitLab adds its own small "added time spent" lines to the issue's activity when time is logged. Those are GitLab's system lines, not comments from the bot; the bot still writes exactly one note.
 - **Time is worked out from your sessions and commits,** so it is an approximation, rounded to the quarter hour. What you tell the bot wins: "that took two hours".
 - **Merge request:** if yours doesn't already name the issue, the bot adds one line at the end of its description, `Related to #<n>`, and changes nothing else in it.
-- **Parent and priority** are set only where there is none, and never changed once set. Priority is one of your team's labels; GitLab has no priority field of its own. When the bot can't tell which parent or priority is right, it asks in its summary.
-- **Weights, epics and iterations are paid GitLab features,** as far as we know. Where your project doesn't have one, the bot skips it and says so once.
+- **Priority** is the work item's own Priority field, set to one of the options your group defined for it. It is a custom field of the top-level group, so the bot looks its options up instead of assuming them. Only if your group has no such field does it fall back to a priority label.
+- **Parent** is the work item's own parent: an epic or a parent issue.
+- **Both are set only where empty,** and never changed once set. When the bot can't tell which parent or priority is right, it asks in its summary.
+- **Weights, epics, iterations and custom fields such as Priority are paid GitLab features** (Premium or Ultimate). Where your project doesn't have one, the bot skips it and says so once.
 - **It never closes an issue.** When work is done the note says Done, and the summary lists the issue for you to close.
 - **What stays out of GitLab:** text copied from sessions or private messages, customer data, anything sensitive, hours of the day, and @-mentions. It describes the work and gives durations.
 - **When it isn't sure where work belongs, it asks** in its summary instead of guessing.

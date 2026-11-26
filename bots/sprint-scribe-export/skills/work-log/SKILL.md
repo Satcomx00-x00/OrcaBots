@@ -12,7 +12,8 @@ Read `memory/scribe-setup.md` in your home; if it is missing, ask your owner and
 - the GitLab group or project, and what a sprint is: an **iteration** or a **milestone**;
 - the projects you may read work from, each with its Orca project (`orca repo list --json`) and its GitLab project;
 - the default project for work that belongs to no repo (a review, a call, a support request);
-- the team's labels: for unplanned work (default `unplanned`), for each type (implementation, bug, user story, task), for each **priority** level, and for status if the board uses them;
+- the team's labels: for unplanned work (default `unplanned`), for each type (implementation, bug, user story, task), and for status if the board uses them;
+- **priority:** the name of the work item's Priority field (default `Priority`) and the top-level group it belongs to. Look up its options (`graphql.md`, beside this skill), show them to your owner, and write down which option means highest, high, medium and low. Only when the group has no such field: the team's priority labels;
 - what each **weight** stands for in time. Show your owner the table in step 5 and use theirs if they change it;
 - the **parent** for unplanned work: an epic or parent issue per area, or one for all of it, or none;
 - whether a merge request line should read `Related to #<n>` (default) or `Closes #<n>`;
@@ -134,26 +135,30 @@ The right weight for an issue is the smallest one whose range covers the total t
 
 ### Parent
 
+The parent is the work item's own parent field: an epic, or a parent issue.
+
 - Set a parent only where there is none. Never change one that is set.
-- Which parent: the epic or parent issue of the planned issue this work came out of or is closest to; else the one the setup gives for that area; else none.
-- Set it through the GitLab connector's own field for it. Without one: on a new issue, end the description with the line `/set_parent <reference>`; on an existing issue with an epic as parent, `glab api --method PUT projects/<project>/issues/<iid> -F epic_id=<the epic's id>`.
+- Which parent: the parent of the planned issue this work came out of or is closest to; else the one the setup gives for that area; else none.
+- Set it with the `hierarchyWidget` mutation in `graphql.md`, with the parent's global work item id. Never guess an id: look it up.
 - When you can't tell which parent is right, leave it empty and ask in the summary.
 
 ### Priority
 
-Priority is one of the team's priority labels from the setup. Never invent one.
+Priority is the work item's **Priority field**, set to one of the options the team defined for it. `graphql.md` has the calls.
 
-- Set a priority only where there is none. Never change one that is set: if it looks wrong, say so in the summary.
-- For unplanned work, from what was asked:
+- Set a priority only where the field is empty. Never change one that is set: if it looks wrong, say so in the summary.
+- Which level, for unplanned work, from what was asked:
   - **Highest:** production is broken, or other people are stopped until it is done.
   - **High:** it was needed within this sprint, by a date.
   - **Medium:** it was asked for and could have waited a few days.
   - **Low:** nice to have.
-- Add it with `glab api --method PUT projects/<project>/issues/<iid> -F add_labels=<label>`.
+- Use the option the setup maps to that level. Never invent an option, and never pick one by its position in the list.
+- Set it with the `customFieldsWidget` mutation, then read it back.
+- **Only when the group has no Priority field,** use the team's priority label instead: `glab api --method PUT projects/<project>/issues/<iid> -F add_labels=<label>`. Never both.
 
 ### Check
 
-Read the issue back after setting fields. Anything that didn't take (a paid feature the project doesn't have, a label that doesn't exist, a parent the project can't hold): don't retry another way. Say it once in the summary.
+Read the issue back after setting fields. Anything that didn't take (a paid feature the project doesn't have, a field or label that doesn't exist, a parent the project can't hold, an `errors` list that isn't empty): don't retry another way. Say it once in the summary.
 
 ## 6. Summary for your owner
 

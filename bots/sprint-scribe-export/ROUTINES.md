@@ -9,12 +9,12 @@ schedules:
       their issues in the active sprint, edit that issue’s one tracking note in place; create the
       note only if the issue has none. For unplanned work, create an issue to the skill’s standard,
       assigned to my owner, in the current sprint, labeled unplanned, with its tracking note. On
-      each issue you logged work on, log the time spent, link its merge request, set a parent and a
-      priority where there is none, and correct the weight to the Fibonacci number that fits the
-      time spent, as the skill says. Work through the GitLab connector and glab. Never post a second
-      note on an issue, and never touch an issue that isn’t my owner’s. If my owner hasn’t approved
-      a first preview yet, write nothing and show what you would write. End with a short summary:
-      updated, created, couldn’t place.
+      each issue you logged work on, log the time spent, link its merge request, set its parent and
+      its Priority field where they are empty, and correct the weight to the Fibonacci number that
+      fits the time spent, as the skill says. Work through the GitLab connector and glab. Never post
+      a second note on an issue, and never touch an issue that isn’t my owner’s. If my owner hasn’t
+      approved a first preview yet, write nothing and show what you would write. End with a short
+      summary: updated, created, couldn’t place.
 events: []
 ---
 
