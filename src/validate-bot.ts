@@ -3,11 +3,12 @@ import { basename, join } from 'node:path'
 import type * as z from 'zod'
 import { type Routines, RoutinesSchema, SkillFrontmatterSchema } from './bot-schema.ts'
 import { splitFrontmatter } from './frontmatter.ts'
+import { ORCA_LINK_LIMITS } from './orca-events.ts'
 
 export type Issue = { file: string; message: string }
 
 const SOUL_SECTIONS = ['## How I work', '## Never'] as const
-const SKILL_MENTION = /\bthe ([a-z0-9]+(?:-[a-z0-9]+)*) skill\b/g
+const MENTION = (kind: 'skill' | 'tool'): RegExp => new RegExp(`\\bthe ([A-Za-z0-9][\\w-]*) ${kind}\\b`, 'g')
 
 async function readText(path: string): Promise<string | null> {
   try {
@@ -71,19 +72,33 @@ async function checkSkills(dir: string): Promise<{ names: Set<string>; issues: I
   return { names, issues }
 }
 
-function checkSkillMentions(routines: Routines, skills: ReadonlySet<string>): Issue[] {
+function checkSkillCount(skills: ReadonlySet<string>): Issue[] {
+  return skills.size > ORCA_LINK_LIMITS.skills
+    ? [{ file: 'skills/', message: `a share link carries at most ${ORCA_LINK_LIMITS.skills} skills` }]
+    : []
+}
+
+/** Every "the X skill" and "the X tool" in a prompt must be one the bot brings. */
+function checkMentions(routines: Routines, skills: ReadonlySet<string>): Issue[] {
+  const tools = new Set(routines.tools.map((tool) => tool.name))
+  const kinds = [
+    { kind: 'skill', known: skills, where: 'skills/' },
+    { kind: 'tool', known: tools, where: 'tools' }
+  ] as const
   const prompts = [
     ...routines.schedules.map((schedule, index) => [`schedules.${index}`, schedule.prompt] as const),
     ...routines.events.map((event, index) => [`events.${index}`, event.prompt] as const)
   ]
-  return prompts.flatMap(([where, text]) =>
-    [...text.matchAll(SKILL_MENTION)]
-      .map((match) => match[1] ?? '')
-      .filter((skill) => !skills.has(skill))
-      .map((skill) => ({
-        file: 'ROUTINES.md',
-        message: `${where}: names the "${skill}" skill, which is not in skills/`
-      }))
+  return prompts.flatMap(([at, text]) =>
+    kinds.flatMap(({ kind, known, where }) =>
+      [...text.matchAll(MENTION(kind))]
+        .map((match) => match[1] ?? '')
+        .filter((name) => !known.has(name))
+        .map((name) => ({
+          file: 'ROUTINES.md',
+          message: `${at}: names the "${name}" ${kind}, which is not in ${where}`
+        }))
+    )
   )
 }
 
@@ -97,7 +112,7 @@ function checkRoutines(text: string | null, skills: ReadonlySet<string>): Issue[
   }
   if (!front) return [{ file: 'ROUTINES.md', message: 'missing frontmatter' }]
   const parsed = RoutinesSchema.safeParse(front.data)
-  return parsed.success ? checkSkillMentions(parsed.data, skills) : zodIssues('ROUTINES.md', parsed.error)
+  return parsed.success ? checkMentions(parsed.data, skills) : zodIssues('ROUTINES.md', parsed.error)
 }
 
 /** Everything that would stop Orca's importer from bringing this bot over as written. */
@@ -107,5 +122,11 @@ export async function validateBot(dir: string): Promise<Issue[]> {
     readText(join(dir, 'ROUTINES.md')),
     checkSkills(dir)
   ])
-  return [...checkFolder(dir), ...checkSoul(soul), ...skills.issues, ...checkRoutines(routines, skills.names)]
+  return [
+    ...checkFolder(dir),
+    ...checkSoul(soul),
+    ...skills.issues,
+    ...checkSkillCount(skills.names),
+    ...checkRoutines(routines, skills.names)
+  ]
 }

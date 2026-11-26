@@ -1,5 +1,8 @@
 ---
 connectors: [github]
+tools:
+  - name: gitlab
+    url: https://gitlab.com/api/v4/mcp
 schedules:
   - name: "Skill miner: Up to three skill drafts"
     cron: "0 10 * * 1"
@@ -18,3 +21,5 @@ Arrives paused. Turn it on once you've seen the first drafts.
 | When | What |
 | --- | --- |
 | Mondays at 10 AM | Up to three skill drafts, each with the sessions behind it |
+
+Once your owner picks a draft, the bot opens a pull request on GitHub, or a merge request through the GitLab tool for a GitLab project.

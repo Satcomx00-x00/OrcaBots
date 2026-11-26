@@ -34,5 +34,5 @@ Up to three candidates, best first. Each: its name, how many sessions asked for 
 
 ## Limits
 
-- Add a skill to a repo only after your owner picks it: one pull request per skill.
+- Add a skill to a repo only after your owner picks it: one pull request per skill on GitHub (`gh pr create`), or one merge request through the gitlab tool on GitLab.
 - Never publish or share a skill outside that repo.

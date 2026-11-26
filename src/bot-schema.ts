@@ -1,6 +1,13 @@
 import { Cron } from 'croner'
 import * as z from 'zod'
-import { CONNECTOR_FOR_SOURCE, ORCA_CONNECTORS, ORCA_EVENT_SOURCES, sendsEvent } from './orca-events.ts'
+import {
+  CONNECTOR_FOR_SOURCE,
+  ORCA_CONNECTORS,
+  ORCA_EVENT_SOURCES,
+  ORCA_LINK_LIMITS,
+  ORCA_TOOL_NAME,
+  sendsEvent
+} from './orca-events.ts'
 
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -38,11 +45,27 @@ export const EventSchema = z.object({
   prompt
 })
 
+const isHttpsUrl = (value: string): boolean => URL.canParse(value) && new URL(value).protocol === 'https:'
+
+/** An MCP server the bot adds as its own tool, signed in once in the browser: no keys here. */
+export const ToolSchema = z.strictObject({
+  name: z.string().regex(ORCA_TOOL_NAME, 'must be letters, digits, "-" or "_"'),
+  url: z.string().max(2048).refine(isHttpsUrl, 'must be an https URL')
+})
+
+const uniqueNames = <T extends { name: string }>(items: readonly T[]): boolean =>
+  new Set(items.map((item) => item.name)).size === items.length
+
 export const RoutinesSchema = z
   .object({
-    connectors: z.array(z.enum(ORCA_CONNECTORS)).default([]),
-    schedules: z.array(ScheduleSchema).default([]),
-    events: z.array(EventSchema).default([])
+    connectors: z.array(z.enum(ORCA_CONNECTORS)).max(ORCA_LINK_LIMITS.connectors).default([]),
+    tools: z.array(ToolSchema).max(ORCA_LINK_LIMITS.tools).refine(uniqueNames, 'names must be unique').default([]),
+    schedules: z
+      .array(ScheduleSchema)
+      .max(ORCA_LINK_LIMITS.schedules)
+      .refine(uniqueNames, 'names must be unique')
+      .default([]),
+    events: z.array(EventSchema).max(ORCA_LINK_LIMITS.events).refine(uniqueNames, 'names must be unique').default([])
   })
   .superRefine((routines, ctx) => {
     routines.events.forEach((event, index) => {

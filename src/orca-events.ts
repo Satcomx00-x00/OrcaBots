@@ -1,4 +1,5 @@
-// Mirrors AUTOMATION_EVENT_KINDS and BOT_PACKAGE_CONNECTORS in stablyai/orca (checked against v1.4.271).
+// Mirrors stablyai/orca: AUTOMATION_EVENT_KINDS (shared/automation-event-triggers.ts), and BOT_PACKAGE_CONNECTORS and
+// the share-link limits (shared/bots/bot-package.ts). Checked against main on 2026-11-26.
 export const ORCA_EVENT_KINDS = {
   slack: ['mentioned', 'message', 'reaction'],
   github: [
@@ -48,3 +49,9 @@ export const CONNECTOR_FOR_SOURCE: Record<OrcaEventSource, OrcaConnector | null>
 export function sendsEvent(source: OrcaEventSource, event: string): boolean {
   return (ORCA_EVENT_KINDS[source] as readonly string[]).includes(event)
 }
+
+/** What one share link (New bot → From a link) carries at most: BotPackageV1Schema's `.max()`s. */
+export const ORCA_LINK_LIMITS = { connectors: 8, tools: 32, schedules: 32, events: 32, skills: 64 } as const
+
+/** A bot tool's name, as Orca's BOT_TOOL_NAME_PATTERN allows it. */
+export const ORCA_TOOL_NAME = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/

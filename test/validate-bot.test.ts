@@ -122,6 +122,49 @@ describe('validateBot', () => {
     ).toEqual(['ROUTINES.md: events.0: names the "skill-mining" skill, which is not in skills/'])
   })
 
+  it('accepts a GitLab tool and a webhook routine that uses it', async () => {
+    const withGitlab = ROUTINES.replace(
+      'schedules:',
+      'tools:\n  - name: gitlab\n    url: https://gitlab.com/api/v4/mcp\nschedules:'
+    ).replace(
+      'events:\n',
+      'events:\n  - name: "When GitLab calls"\n    source: webhook\n    event: call\n    prompt: Read it through the gitlab tool.\n'
+    )
+    expect(await messages({ ...VALID, 'ROUTINES.md': withGitlab })).toEqual([])
+  })
+
+  it('rejects a prompt that names a tool the bot does not add', async () => {
+    expect(
+      await messages({
+        ...VALID,
+        'ROUTINES.md': ROUTINES.replace('Read it with', 'Read it through the gitlab tool with')
+      })
+    ).toEqual(['ROUTINES.md: events.0: names the "gitlab" tool, which is not in tools'])
+  })
+
+  it('rejects a tool that is not an https URL', async () => {
+    expect(
+      await messages({
+        ...VALID,
+        'ROUTINES.md': ROUTINES.replace(
+          'schedules:',
+          'tools:\n  - name: gitlab\n    url: http://gitlab.com/mcp\nschedules:'
+        )
+      })
+    ).toEqual(['ROUTINES.md: tools.0.url: must be an https URL'])
+  })
+
+  it('rejects two routines with the same name', async () => {
+    const twice = ROUTINES.replace(
+      '"When a pull request is closed: find out why"',
+      '"Agent coach: weekly review"'
+    ).replace(
+      'events:',
+      'events:\n  - name: "Agent coach: weekly review"\n    source: github\n    event: pr_merged\n    prompt: x\n'
+    )
+    expect(await messages({ ...VALID, 'ROUTINES.md': twice })).toEqual(['ROUTINES.md: events: names must be unique'])
+  })
+
   it('reports a missing file instead of throwing', async () => {
     const { 'ROUTINES.md': _, ...rest } = VALID
     expect(await messages(rest)).toEqual(['ROUTINES.md: missing'])
