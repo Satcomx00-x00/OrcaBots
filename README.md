@@ -2,11 +2,24 @@
 
 Importable bots for [Orca](https://github.com/stablyai/orca) that watch your agents and your app.
 
-| Bot                                       | Runs                                                          | What it does                                                                                             |
-| ----------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [Agent coach](bots/agent-coach-export)    | Fridays 4 PM, and when an agent's PR or MR is closed unmerged | Finds where agents loop, stall or get corrected, and proposes one AGENTS.md / CLAUDE.md rule per pattern |
-| [Skill miner](bots/skill-miner-export)    | Mondays 10 AM                                                 | Spots procedures you keep explaining to agents and drafts each as a SKILL.md                             |
-| [Fresh-eyes user](bots/fresh-eyes-export) | Wednesdays 10 AM, and after a GitHub or GitLab deploy         | Walks your app like a first-time user, desktop and phone, and reports blockers with screenshots          |
+**Watching your agents**
+
+| Bot                                        | Runs                                                          | What it does                                                                                             |
+| ------------------------------------------ | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [Agent coach](bots/agent-coach-export)     | Fridays 4 PM, and when an agent's PR or MR is closed unmerged | Finds where agents loop, stall or get corrected, and proposes one AGENTS.md / CLAUDE.md rule per pattern |
+| [Skill miner](bots/skill-miner-export)     | Mondays 10 AM                                                 | Spots procedures you keep explaining to agents and drafts each as a SKILL.md                             |
+| [Cost auditor](bots/cost-auditor-export)   | Fridays 9 AM                                                  | Ranks sessions by turns and hours against what they shipped, and says what would have made each cheaper  |
+| [Prompt doctor](bots/prompt-doctor-export) | Mondays 9 AM                                                  | Finds the session openings that needed the most follow-up and writes a template for each kind of request |
+| [Rule keeper](bots/rule-keeper-export)     | When an agent opens a PR or MR, and the 1st of each month     | Checks each change against the rules in AGENTS.md / CLAUDE.md, and finds the rules nobody needs          |
+
+**Watching your app**
+
+| Bot                                                      | Runs                                                         | What it does                                                                                               |
+| -------------------------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| [Fresh-eyes user](bots/fresh-eyes-export)                | Wednesdays 10 AM, and after a GitHub or GitLab deploy        | Walks your app like a first-time user, desktop and phone, and reports blockers with screenshots            |
+| [Regression walker](bots/regression-walker-export)       | Thursdays 10 AM, after a deploy, and when a bug issue closes | Replays the bugs you already fixed in the browser and reports the ones that came back                      |
+| [Accessibility walker](bots/accessibility-walker-export) | Tuesdays 10 AM, and after a deploy                           | Does the main job keyboard-only and zoomed in, checks names and contrast, and cites the WCAG 2.2 criterion |
+| [Copy checker](bots/copy-checker-export)                 | Thursdays 2 PM                                               | Lists typos, things called by two names, placeholder text and error messages that don't help               |
 
 Every bot works with **GitHub** (the GitHub connector, `gh`) and **GitLab** (the GitLab connector). Nothing writes to a repo, files an issue or opens a PR or MR until you say yes.
 
@@ -18,15 +31,21 @@ Requires Orca with Bots (beta), v1.4.271 or later.
 
 In Orca: **New bot → From a link**, paste the bot's link, review what it brings, **Create**.
 
-| Bot             | Link                |
-| --------------- | ------------------- |
-| Agent coach     | _not published yet_ |
-| Skill miner     | _not published yet_ |
-| Fresh-eyes user | _not published yet_ |
+| Bot                  | Link                |
+| -------------------- | ------------------- |
+| Agent coach          | _not published yet_ |
+| Skill miner          | _not published yet_ |
+| Cost auditor         | _not published yet_ |
+| Prompt doctor        | _not published yet_ |
+| Rule keeper          | _not published yet_ |
+| Fresh-eyes user      | _not published yet_ |
+| Regression walker    | _not published yet_ |
+| Accessibility walker | _not published yet_ |
+| Copy checker         | _not published yet_ |
 
 Orca only opens its own share links (`https://app.orca.dev/bots/share/<id>` or `orca://bots/share/<id>`), never a GitHub or raw file URL. A link is published once from a bot made from this repo's folder (below): open the bot, **Share**, keep everything ticked, copy the link, and put it in the table above. Publish again after changing a bot folder so the link serves the new version.
 
-A link carries the soul, skills, schedules, the GitHub and GitLab connectors, and GitHub event routines. It does not carry webhook routines, so the GitLab merge-request and deploy routines come from the bot itself: its soul offers to create them in its first chat.
+A link carries the soul, skills, schedules, the GitHub and GitLab connectors, and GitHub event routines. It does not carry webhook routines, so the GitLab routines come from the bot itself: its soul offers to create them in its first chat.
 
 ### From the folder
 
@@ -38,17 +57,17 @@ To create the bot on a paired server instead of this computer, copy the folder t
 
 ### After install
 
-Each bot folder has a `README.md` with its own steps: [Agent coach](bots/agent-coach-export/README.md), [Skill miner](bots/skill-miner-export/README.md), [Fresh-eyes user](bots/fresh-eyes-export/README.md).
+Each bot folder has a `README.md` with its own steps, for example [`bots/agent-coach-export/README.md`](bots/agent-coach-export/README.md).
 
 ### What you get
 
 - Its soul, its skills, and its schedules, **paused**. Turn them on in the bot's Automations once the first run looks right.
 - GitHub routines wait until you connect GitHub for that bot; it offers the Connect card.
 - The GitLab connector, signed in once in the browser. For self-managed or Dedicated GitLab, tell the bot your address; it reconnects GitLab at `https://<host>/api/v4/mcp`.
-- GitLab sends Orca no events of its own, so GitLab routines are webhooks: copy the URL from the automation's card (**Copy URL**) into the GitLab project's **Settings → Webhooks**, with **Merge request events** (Agent coach) or **Deployment events** (Fresh-eyes user) ticked.
+- GitLab sends Orca no events of its own, so GitLab routines are webhooks: copy the URL from the automation's card (**Copy URL**) into the GitLab project's **Settings → Webhooks**, and tick the events that bot's README names.
 - No keys or logins: there are none in this repo, and Orca never copies them.
 
-Agent coach and Skill miner read sessions only where **Settings → Agent Session History** is on, one computer at a time.
+Agent coach, Skill miner, Cost auditor, Prompt doctor and Rule keeper read sessions only where **Settings → Agent Session History** is on, one computer at a time.
 
 ## Bot folder layout
 
